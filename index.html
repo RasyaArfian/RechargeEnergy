@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Semangat Ecak 💕 — Energy Recharge Week</title>
+  <meta name="description" content="Program semangat spesial untuk Ecak selama minggu rapat 13–18 Juli 2026" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Floating Petals Background -->
+  <div class="petals-container" id="petalsContainer"></div>
+
+  <!-- ======= HEADER ======= -->
+  <header class="main-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="lily-icon">🌸</span>
+        <span class="logo-text">Untuk <em>Ecak</em></span>
+      </div>
+      <div class="wib-clock" id="wibClock">--:--:-- WIB</div>
+    </div>
+  </header>
+
+  <!-- ======= HERO ======= -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">💌 Special Week • 13 – 18 Juli 2026</div>
+      <h1 class="hero-title">
+        Recharge<br/><span class="gradient-text">Energy-mu,</span><br/>Ecak Sayang 🌷
+      </h1>
+      <p class="hero-sub">
+        Minggu ini memang padat banget, tapi kamu <strong>kuat</strong>!<br/>
+        Buka 1 kejutan per hari — khusus buat kamu ✨
+      </p>
+      <div class="today-badge" id="todayBadge"></div>
+    </div>
+    <div class="hero-art">
+      <div class="lily-big">🌸</div>
+      <div class="matcha-cup">🍵</div>
+    </div>
+  </section>
+
+  <!-- ======= DAY CARDS GRID ======= -->
+  <section class="cards-section">
+    <h2 class="section-title">Perjalanan Semangat Kamu 🗓️</h2>
+    <div class="cards-grid" id="cardsGrid"></div>
+  </section>
+
+  <!-- ======= DAY MODAL ======= -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-box" id="modalBox">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- ======= FOOTER ======= -->
+  <footer class="main-footer">
+    <p>Dibuat dengan 💕 oleh orang yang selalu mendukungmu</p>
+    <p class="footer-small">Kamu bisa, Ecak! 🌸🍵</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
