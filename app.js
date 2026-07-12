@@ -1076,3 +1076,137 @@ document.addEventListener('DOMContentLoaded', () => {
 // Expose to global for inline onclick
 window.openModal = openModal;
 window.startCatchGame = startCatchGame;
+
+/* ============================================================
+   BACKGROUND MUSIC PLAYER — Malapetaka by Juicy Luicy
+   Uses YouTube IFrame API (hidden player)
+   ============================================================ */
+(function () {
+  // ── Video ID for "Malapetaka - Juicy Luicy" ──
+  const VIDEO_ID = 'gCYcHz2k5x0';
+
+  let ytPlayer = null;
+  let isPlaying = false;
+  let isMuted = false;
+  let playerReady = false;
+  let autoplayTriggered = false;
+
+  const widget       = document.getElementById('musicWidget');
+  const playBtn      = document.getElementById('musicPlayBtn');
+  const volBtn       = document.getElementById('musicVolBtn');
+  const playIcon     = document.getElementById('playIcon');
+  const pauseIcon    = document.getElementById('pauseIcon');
+  const volOnIcon    = document.getElementById('volOnIcon');
+  const volOffIcon   = document.getElementById('volOffIcon');
+
+  // ── Called by YouTube API when ready ──
+  window.onYouTubeIframeAPIReady = function () {
+    ytPlayer = new YT.Player('ytPlayer', {
+      videoId: VIDEO_ID,
+      playerVars: {
+        autoplay: 1,
+        loop: 1,
+        playlist: VIDEO_ID,  // needed for loop
+        controls: 0,
+        disablekb: 1,
+        fs: 0,
+        modestbranding: 1,
+        rel: 0,
+        mute: 0
+      },
+      events: {
+        onReady: onPlayerReady,
+        onStateChange: onPlayerStateChange,
+        onError: onPlayerError
+      }
+    });
+  };
+
+  function onPlayerReady(e) {
+    playerReady = true;
+    e.target.setVolume(60);
+
+    // Try autoplay immediately
+    tryAutoplay();
+
+    // Pulse hint to draw attention
+    if (widget) widget.classList.add('hint-pulse');
+    setTimeout(() => { if (widget) widget.classList.remove('hint-pulse'); }, 5000);
+  }
+
+  function onPlayerStateChange(e) {
+    if (e.data === YT.PlayerState.PLAYING) {
+      setPlayingState(true);
+    } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
+      setPlayingState(false);
+    }
+  }
+
+  function onPlayerError(e) {
+    // If video not playable (embedding disabled), silently handle
+    console.warn('Music player error:', e.data);
+  }
+
+  function tryAutoplay() {
+    if (!playerReady || !ytPlayer) return;
+    try {
+      ytPlayer.playVideo();
+    } catch (err) {
+      // Browser blocked autoplay — wait for user interaction
+    }
+  }
+
+  // ── On first user interaction, start music ──
+  function onFirstInteraction() {
+    if (autoplayTriggered) return;
+    autoplayTriggered = true;
+    document.removeEventListener('click',      onFirstInteraction);
+    document.removeEventListener('touchstart', onFirstInteraction);
+    document.removeEventListener('keydown',    onFirstInteraction);
+
+    if (playerReady && ytPlayer && !isPlaying) {
+      ytPlayer.playVideo();
+    }
+  }
+
+  document.addEventListener('click',      onFirstInteraction, { once: false });
+  document.addEventListener('touchstart', onFirstInteraction, { once: false, passive: true });
+  document.addEventListener('keydown',    onFirstInteraction, { once: false });
+
+  // ── UI state ──
+  function setPlayingState(playing) {
+    isPlaying = playing;
+    if (widget) widget.classList.toggle('playing', playing);
+    if (playIcon)  playIcon.style.display  = playing ? 'none'        : 'block';
+    if (pauseIcon) pauseIcon.style.display = playing ? 'block'       : 'none';
+  }
+
+  function setMuteState(muted) {
+    isMuted = muted;
+    if (!ytPlayer) return;
+    muted ? ytPlayer.mute() : ytPlayer.unMute();
+    if (volOnIcon)  volOnIcon.style.display  = muted ? 'none'  : 'block';
+    if (volOffIcon) volOffIcon.style.display = muted ? 'block' : 'none';
+  }
+
+  // ── Button handlers ──
+  if (playBtn) {
+    playBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (!playerReady || !ytPlayer) return;
+      if (isPlaying) {
+        ytPlayer.pauseVideo();
+      } else {
+        ytPlayer.playVideo();
+      }
+    });
+  }
+
+  if (volBtn) {
+    volBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setMuteState(!isMuted);
+    });
+  }
+
+})();
