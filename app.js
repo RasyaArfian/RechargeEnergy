@@ -1,6 +1,6 @@
 /* ============================================================
    APP.JS — Main Application Logic
-   Semangat Ecak 💕 — Energy Recharge Week
+   Semangat  Ecaaak 💕 — Energy Recharge Week
    ============================================================ */
 
 /* ---------- DATE HELPERS ---------- */
@@ -77,7 +77,7 @@ const DAYS = [
     label: 'Hari ke-6',
     dayName: 'Sabtu, 18 Juli',
     emoji: '🎉',
-    title: 'Kamu Berhasil, Ecak!',
+    title: 'Kamu Berhasil,  Ecaaak!',
     desc: 'Hari terakhir — tangkap seblak & gacoan virtualmu sebagai hadiah!',
     tag: 'Perayaan + Game',
     tagClass: 'unlocked',
@@ -94,7 +94,7 @@ const contentRenderers = {
       <div class="modal-day-header">
         <div class="modal-day-emoji">🎨</div>
         <div class="modal-day-label">Hari ke-1 • Senin 13 Juli</div>
-        <div class="modal-day-title">Hai Ecak, Selamat Datang! 🌸</div>
+        <div class="modal-day-title">Hai  Ecaaak, Selamat Datang! 🌸</div>
       </div>
 
       <div class="quote-card">
@@ -103,7 +103,7 @@ const contentRenderers = {
       </div>
 
       <div class="love-letter">
-        Ecak sayang,<br/><br/>
+         Ecaaak,<br/><br/>
         Aku tahu minggu ini bakal <strong>super padat</strong> — rapat dari jam 17.00 sampai malam setelah pulang kampus itu bukan hal kecil. Tapi aku lihat kamu, dan kamu selalu bisa melewati setiap tantangan dengan senyum ceriamu yang khas 🌸<br/><br/>
         Untuk hari ini, aku minta kamu <strong>melukis apa saja</strong> di kanvas di bawah ini. Nggak harus bagus, nggak ada penilaian — ini waktumu untuk bersenang-senang dan mengekspresikan diri, persis seperti hobi melukismu yang aku suka! 🎨
       </div>
@@ -126,7 +126,7 @@ const contentRenderers = {
       </div>
 
       <div class="tip-box">
-        <h4>💡 Tips buat Ecak</h4>
+        <h4>💡 Tips buat  Ecaaak</h4>
         <p>Setelah rapat malam ini, ingat untuk minum air putih, istirahatkan matamu dari layar selama 5 menit, dan tidur tepat waktu ya! Kamu perlu tenagamu untuk esok hari 🍵</p>
       </div>
 
@@ -150,11 +150,11 @@ const contentRenderers = {
 
       <div class="quote-card">
         "Kamu seperti matcha — kadang terasa pahit saat berjuang, tapi hasilnya selalu luar biasa."
-        <div class="quote-author">— Untukmu, Ecak 💕</div>
+        <div class="quote-author">— Untukmu,  Ecaaak 💕</div>
       </div>
 
       <div class="love-letter">
-        Ecak,<br/><br/>
+         Ecaaak,<br/><br/>
         Hari kedua dan kamu masih berdiri kuat! 🎉 Sambil istirahat sebentar, aku minta kamu main kuis <strong>matcha</strong> dulu — siapa tahu kamu jadi master matcha setelah ini! Dan ingat, secangkir matcha hangat sambil baca buku favoritmu itu adalah combo yang sempurna untuk recharge energimu 🍵📚
       </div>
 
@@ -188,14 +188,14 @@ const contentRenderers = {
       </div>
 
       <div class="tip-box">
-        <h4>🍵 Resep Matcha Latte untuk Ecak</h4>
+        <h4>🍵 Resep Matcha Latte untuk  Ecaaak</h4>
         <p>Campurkan 1 sdt bubuk matcha + 2 sdm air panas, aduk rata. Tambahkan 200ml susu oat hangat, sedikit madu. Nikmati saat istirahat rapat! 🌿✨</p>
       </div>
 
       <ul class="checklist" id="checklist-d2">
         <li data-key="d2c1"><div class="check-box"></div><span>Minum segelas matcha atau teh hangat hari ini 🍵</span></li>
         <li data-key="d2c2"><div class="check-box"></div><span>Ambil 10 napas dalam sebelum rapat dimulai 🌬️</span></li>
-        <li data-key="d2c3"><div class="check-box"></div><span>Kirim pesan ke orang yang kamu sayang 💌</span></li>
+        <li data-key="d2c3"><div class="check-box"></div><span>Kirim pesan ke orang yang kamu 💌</span></li>
         <li data-key="d2c4"><div class="check-box"></div><span>Bangga dengan dirimu sendiri hari ini 🌟</span></li>
       </ul>
     `;
@@ -212,11 +212,11 @@ const contentRenderers = {
 
       <div class="quote-card">
         "Di tengah perjalanan yang panjang, ingatlah mengapa kamu mulai — dan itu sudah cukup untuk terus maju."
-        <div class="quote-author">— Untuk Ecak yang pantang menyerah 🌸</div>
+        <div class="quote-author">— Untuk  Ecaaak yang pantang menyerah 🌸</div>
       </div>
 
       <div class="love-letter">
-        Ecak,<br/><br/>
+         Ecaaak,<br/><br/>
         Hari ketiga — <strong>kamu sudah sampai tengah perjalanan!</strong> Itu bukan hal kecil loh. Kayak buku yang kamu lagi baca, rasa penasarannya makin besar di tengah cerita kan? Begitu juga minggu ini — makin ke sini, makin dekat ke akhir yang indah 📚🌸<br/><br/>
         Main puzzle kata bareng aku yuk! Susun kata-kata ini jadi kalimat penyemangat spesial buat kamu 🧩
       </div>
@@ -236,7 +236,7 @@ const contentRenderers = {
       </div>
 
       <div style="margin-bottom:1.5rem;">
-        <div class="game-title">📚 Rekomendasi Buku untuk Ecak</div>
+        <div class="game-title">📚 Rekomendasi Buku untuk  Ecaaak</div>
         <div style="display:grid;gap:.8rem;">
           ${[
             { emoji: '🌸', title: 'The Alchemist', author: 'Paulo Coelho', desc: 'Tentang keberanian mengejar mimpi — cocok banget buat kamu yang ceria dan penuh semangat!' },
@@ -274,16 +274,16 @@ const contentRenderers = {
 
       <div class="quote-card">
         "Seperti bunga lily yang tumbuh indah meski di lumpur — kamu mekar paling cantik di tengah kesulitan."
-        <div class="quote-author">— Selalu kagum melihatmu, Ecak 🌸</div>
+        <div class="quote-author">— Selalu kagum melihatmu,  Ecaaak 🌸</div>
       </div>
 
       <div class="love-letter">
-        Ecak sayang,<br/><br/>
+         Ecaaak,<br/><br/>
         Hari keempat! Kamu <strong>luar biasa sekali</strong> 🎉 Empat hari dengan rapat panjang, tapi kamu masih berdiri tegak. Aku bangga banget sama kamu 💕<br/><br/>
         Untuk hari ini, aku buatkan taman bunga virtual khusus buat kamu. Setiap kali kamu klik taman, bunga pink lily akan tumbuh! Bayangkan ini sebagai semua doa dan semangat yang aku kirimkan untukmu 🌸🌷
       </div>
 
-      <div class="game-title">🌸 Taman Lily Virtual Ecak</div>
+      <div class="game-title">🌸 Taman Lily Virtual  Ecaaak</div>
       <div class="garden-wrap" id="gardenWrap">
         <div class="garden-hint" id="gardenHint">✨ Klik di mana saja untuk menumbuhkan bunga! ✨</div>
       </div>
@@ -294,7 +294,7 @@ const contentRenderers = {
 
       <div class="tip-box" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0)">
         <h4>🌷 Fakta Bunga Lily Pink</h4>
-        <p>Bunga lily pink melambangkan <strong>kasih sayang, kecantikan, dan keberuntungan</strong>. Di banyak budaya, lily adalah simbol wanita yang kuat dan anggun — persis seperti kamu, Ecak! 🌸</p>
+        <p>Bunga lily pink melambangkan <strong>kasih sayang, kecantikan, dan keberuntungan</strong>. Di banyak budaya, lily adalah simbol wanita yang kuat dan anggun — persis seperti kamu,  Ecaaak! 🌸</p>
       </div>
 
       <div class="game-title" style="margin-top:1rem;">✏️ Tantangan Menggambar Mini</div>
@@ -324,16 +324,16 @@ const contentRenderers = {
       <div class="modal-day-header">
         <div class="modal-day-emoji">💨</div>
         <div class="modal-day-label">Hari ke-5 • Jumat 17 Juli</div>
-        <div class="modal-day-title">Hampir Sampai, Ecak! 🌟</div>
+        <div class="modal-day-title">Hampir Sampai,  Ecaaak! 🌟</div>
       </div>
 
       <div class="quote-card">
         "Puncak gunung tidak akan kabur — ia menunggumu dengan sabar. Teruslah melangkah."
-        <div class="quote-author">— Untuk Ecak di hari kelima 🏔️💕</div>
+        <div class="quote-author">— Untuk  Ecaaak di hari kelima 🏔️💕</div>
       </div>
 
       <div class="love-letter">
-        Ecak,<br/><br/>
+         Ecaaak,<br/><br/>
         <strong>HARI KELIMA!</strong> 🎊 Kamu hampir sampai di garis akhir! Tinggal satu hari lagi setelah ini — kamu sudah melewati yang terberatnya dengan sangat indah 🌸<br/><br/>
         Hari ini aku ingin mengajakmu untuk <strong>bernapas bersama</strong>. Ikuti latihan pernapasan ini sebelum atau setelah rapat — terbukti secara ilmiah bisa menurunkan stres dan merefresh energimu dalam 2 menit saja! 🍃
       </div>
@@ -348,7 +348,7 @@ const contentRenderers = {
       </div>
 
       <div class="tip-box">
-        <h4>🧘 Teknik 4-7-8 untuk Ecak</h4>
+        <h4>🧘 Teknik 4-7-8 untuk  Ecaaak</h4>
         <p>Hirup 4 detik → Tahan 7 detik → Hembuskan 8 detik. Ulangi 4x. Teknik ini menenangkan sistem saraf dan membuatmu lebih fokus untuk rapat malam ini! 💆</p>
       </div>
 
@@ -388,12 +388,12 @@ const contentRenderers = {
       <div class="modal-day-header">
         <div class="modal-day-emoji">🎉</div>
         <div class="modal-day-label">Hari ke-6 • Sabtu 18 Juli</div>
-        <div class="modal-day-title">KAMU BERHASIL, ECAK!! 🏆</div>
+        <div class="modal-day-title">KAMU BERHASIL,  Ecaaak!! 🏆</div>
       </div>
 
       <div class="celebration-wrap">
         <div class="celebration-emoji">🎊🌸🏆🌸🎊</div>
-        <div class="celebration-text">Selamat, Ecak Tersayang!</div>
+        <div class="celebration-text">Selamat, Ecaaak!</div>
         <div class="celebration-sub">
           Kamu telah melewati 6 hari penuh perjuangan dengan sangat luar biasa.<br/>
           Kamu kuat, ceria, dan menginspirasi. Aku bangga banget sama kamu! 💕
@@ -401,14 +401,14 @@ const contentRenderers = {
       </div>
 
       <div class="quote-card">
-        "Perjalanan yang paling berat menghasilkan cerita yang paling indah. Dan ceritamu, Ecak, adalah yang paling indah yang pernah aku baca."
+        "Perjalanan yang paling berat menghasilkan cerita yang paling indah. Dan ceritamu,  Ecaaak, adalah yang paling indah yang pernah aku baca."
         <div class="quote-author">— Dari yang paling bangga padamu di dunia ini 💕🌸</div>
       </div>
 
       <div class="love-letter">
-        Ecak sayang,<br/><br/>
+        Ecaaak,<br/><br/>
         <strong>HARI INI ADALAH HARI TERAKHIR!</strong> 🎉🎊 Kamu sudah melewati 6 hari yang luar biasa — setiap malam rapat dari jam 17.00 sampai 20.00 atau lebih, setelah seharian kampus, dan kamu TETAP berdiri dengan kepala tegak dan senyum ceritamu yang khas.<br/><br/>
-        Kamu adalah wanita yang paling kuat yang aku kenal. Keceriaanmu adalah kekuatanmu, dan hobimu menggambar dan membaca adalah jiwa yang membuatmu begitu indah. Aku cinta kamu, Ecak 🌸💕<br/><br/>
+        Kamu adalah wanita yang paling kuat yang aku kenal. Keceriaanmu adalah kekuatanmu, dan hobimu menggambar dan membaca adalah jiwa yang membuatmu begitu indah. Aku cinta kamu,  Ecaaak 🌸💕<br/><br/>
         Sekarang, sebagai hadiah terakhir — <strong>tangkap seblak dan gacoan virtual</strong> sebagai perayaanmu! Kamu pantas mendapatkan semuanya! 🍜🔥
       </div>
 
@@ -432,7 +432,7 @@ const contentRenderers = {
         <p style="font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--text-dark);line-height:1.8;">
           Terima kasih sudah menjadi dirimu sendiri —<br/>
           si ceria yang suka lily pink, matcha, menggambar, dan membaca.<br/>
-          Kamu sempurna apa adanya, Ecak 💕
+          Kamu sempurna apa adanya,  Ecaaak 💕
         </p>
         <button class="breath-btn" id="launchConfetti" style="margin-top:1rem;">🎉 Rayakan Bersama!</button>
       </div>
@@ -609,7 +609,7 @@ function initDrawingCanvas() {
   const saveBtn = document.getElementById('saveCanvas');
   if (saveBtn) saveBtn.addEventListener('click', () => {
     const a = document.createElement('a');
-    a.download = 'lukisan-ecak.png';
+    a.download = 'lukisan- Ecaaak.png';
     a.href = canvas.toDataURL();
     a.click();
   });
@@ -954,7 +954,7 @@ function showLockedToast() {
     box-shadow:var(--shadow-pink);
     animation:toastIn .3s cubic-bezier(.34,1.56,.64,1);
   `;
-  toast.textContent = '🔒 Konten ini belum waktunya! Sabar ya, Ecak 🌸';
+  toast.textContent = '🔒 Konten ini belum waktunya! Sabar ya,  Ecaaak 🌸';
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 2800);
 }
@@ -980,7 +980,7 @@ function renderCards() {
         <div class="card-date">${day.dayName}</div>
         <span class="card-emoji">${isLocked ? '🔒' : day.emoji}</span>
         <div class="card-title">${isLocked ? 'Belum saatnya...' : day.title}</div>
-        <div class="card-desc">${isLocked ? 'Konten ini akan terbuka pada harinya. Semangat tunggu ya, Ecak! 🌸' : day.desc}</div>
+        <div class="card-desc">${isLocked ? 'Konten ini akan terbuka pada harinya. Semangat tunggu ya,  Ecaaak! 🌸' : day.desc}</div>
         <div class="card-tag ${day.tagClass}">${isLocked ? '🔐 Terkunci' : isPast ? '✅ Sudah Dibuka' : isToday ? '✨ Buka Sekarang!' : day.tag}</div>
       </div>
     `;
@@ -1004,9 +1004,9 @@ function renderTodayBadge() {
   if (found) {
     badge.textContent = `✨ Hari ini: ${found.dayName} — Buka kejutanmu!`;
   } else if (today < DAYS[0].date) {
-    badge.textContent = `⏳ Dimulai 13 Juli 2026 — Tunggu sebentar lagi, Ecak! 🌸`;
+    badge.textContent = `⏳ Dimulai 13 Juli 2026 — Tunggu sebentar lagi,  Ecaaak! 🌸`;
   } else if (today > DAYS[DAYS.length - 1].date) {
-    badge.textContent = `🎊 Minggu semangat sudah selesai! Kamu luar biasa, Ecak 💕`;
+    badge.textContent = `🎊 Minggu semangat sudah selesai! Kamu luar biasa,  Ecaaak 💕`;
   } else {
     badge.textContent = '';
   }
