@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🧪 Test Semua Fitur — Energy Recharge Week</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink-50:#fff0f6; --pink-100:#ffe0ef; --pink-200:#ffb3d1;
+      --pink-300:#ff80b5; --pink-400:#ff4d99; --pink-500:#e83e8c; --pink-600:#c2185b;
+      --matcha:#6b8f71; --matcha-light:#a8c5a2;
+      --cream:#fff8f2; --white:#ffffff;
+      --text-dark:#2d1b2e; --text-mid:#6b4c6e; --text-light:#b39dbd;
+      --shadow-pink:0 8px 32px rgba(232,62,140,.18);
+      --radius:16px;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg,#1a0628,#2d1040 50%,#1a2840);
+      min-height: 100vh;
+      padding: 1.5rem 1rem 4rem;
+    }
+
+    /* ── TOP BAR ── */
+    .topbar {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .topbar h1 {
+      font-family:'Playfair Display',serif;
+      color:#fff;
+      font-size: clamp(1.4rem,3vw,2rem);
+      margin-bottom:.4rem;
+    }
+    .topbar p { color:rgba(255,255,255,.5); font-size:.85rem; }
+
+    /* ── DAY TABS ── */
+    .day-tabs {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .day-tab {
+      padding: .55rem 1.1rem;
+      border-radius: 30px;
+      border: 1.5px solid rgba(255,255,255,.15);
+      background: rgba(255,255,255,.07);
+      color: rgba(255,255,255,.6);
+      font-family:'Nunito',sans-serif;
+      font-weight: 700;
+      font-size: .82rem;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .day-tab:hover { background:rgba(255,255,255,.15); color:#fff; }
+    .day-tab.active {
+      background: linear-gradient(135deg,var(--pink-400),var(--pink-600));
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(232,62,140,.4);
+    }
+
+    /* ── CONTENT PANEL ── */
+    .day-panel { display: none; }
+    .day-panel.active { display: block; }
+
+    .content-card {
+      background: var(--white);
+      border-radius: 24px;
+      max-width: 720px;
+      margin: 0 auto;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,.35);
+    }
+
+    /* Day header */
+    .modal-day-header {
+      padding: 1.8rem 2rem 1.4rem;
+      text-align: center;
+    }
+    .d1-hdr { background: linear-gradient(135deg,#e83e8c,#ff80b5); }
+    .d2-hdr { background: linear-gradient(135deg,#6b8f71,#a8c5a2); }
+    .d3-hdr { background: linear-gradient(135deg,#7c3aed,#a78bfa); }
+    .d4-hdr { background: linear-gradient(135deg,#db2777,#f472b6); }
+    .d5-hdr { background: linear-gradient(135deg,#0891b2,#67e8f9); }
+    .d6-hdr { background: linear-gradient(135deg,#d97706,#fcd34d); }
+
+    .modal-day-emoji { font-size: 2.8rem; margin-bottom: .4rem; filter:drop-shadow(0 4px 12px rgba(0,0,0,.3)); }
+    .modal-day-label { font-size: .78rem; font-weight: 700; color: rgba(255,255,255,.8); text-transform: uppercase; letter-spacing: .08em; }
+    .modal-day-title { font-size: 1.3rem; font-weight: 800; color: #fff; margin-top: .3rem; font-family:'Playfair Display',serif; }
+
+    /* Body area */
+    .modal-body-inner { padding: 1.8rem 2rem; }
+
+    /* Quote */
+    .quote-card {
+      background: linear-gradient(135deg,var(--pink-50),#fce4ec);
+      border-left: 4px solid var(--pink-400);
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      font-family:'Playfair Display',serif;
+      font-style: italic;
+      color: var(--text-dark);
+      font-size: .95rem;
+      margin-bottom: 1.2rem;
+      line-height: 1.7;
+    }
+    .quote-author { font-size: .78rem; color: var(--pink-500); font-style: normal; font-weight: 700; margin-top: .5rem; }
+
+    /* Love letter */
+    .love-letter {
+      background: var(--pink-50);
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      font-size: .88rem;
+      color: var(--text-mid);
+      line-height: 1.8;
+      margin-bottom: 1.4rem;
+    }
+
+    /* Section title */
+    .game-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: .8rem;
+    }
+
+    /* ── CANVAS ── */
+    canvas#drawCanvas, canvas#drawCanvas2 {
+      width: 100%;
+      height: 220px;
+      border-radius: 12px;
+      border: 2px solid var(--pink-200);
+      display: block;
+      cursor: crosshair;
+      background: #fff8fc;
+      touch-action: none;
+    }
+    .draw-controls {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      flex-wrap: wrap;
+      margin: .8rem 0 1.2rem;
+    }
+    .color-btn {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform .15s;
+    }
+    .color-btn:hover, .color-btn.active { transform:scale(1.25); border-color:#fff; outline:2px solid var(--pink-400); }
+    .size-slider { flex:1; min-width: 80px; accent-color: var(--pink-400); }
+    .draw-btn {
+      padding: .38rem .85rem;
+      border-radius: 20px;
+      border: none;
+      background: var(--pink-100);
+      color: var(--pink-600);
+      font-weight: 700;
+      font-size: .8rem;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .draw-btn:hover { background: var(--pink-200); }
+
+    /* Tip box */
+    .tip-box {
+      background: linear-gradient(135deg,#e8f5e9,#c8e6c9);
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.2rem;
+    }
+    .tip-box h4 { font-size: .9rem; color: var(--matcha); margin-bottom: .3rem; }
+    .tip-box p { font-size: .83rem; color: #3d5a42; line-height: 1.6; }
+
+    /* ── FACT GRID ── */
+    .fact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .8rem;
+      margin-bottom: 1.4rem;
+    }
+    .fact-card {
+      background: var(--pink-50);
+      border-radius: 12px;
+      padding: 1rem;
+      border: 1.5px solid var(--pink-100);
+    }
+    .fact-icon { font-size: 1.6rem; margin-bottom: .3rem; }
+    .fact-card h4 { font-size: .85rem; color: var(--text-dark); margin-bottom: .25rem; }
+    .fact-card p { font-size: .78rem; color: var(--text-mid); line-height: 1.5; }
+
+    /* ── QUIZ ── */
+    .quiz-box {
+      background: var(--pink-50);
+      border-radius: 16px;
+      padding: 1.2rem;
+      margin-bottom: 1.4rem;
+      border: 1.5px solid var(--pink-100);
+    }
+    .quiz-question { font-weight: 700; color: var(--text-dark); margin-bottom: .8rem; font-size: .9rem; }
+    .quiz-opt {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: #fff;
+      border: 2px solid var(--pink-200);
+      border-radius: 10px;
+      padding: .6rem .9rem;
+      margin-bottom: .4rem;
+      font-family:'Nunito',sans-serif;
+      font-size: .84rem;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .quiz-opt:hover { border-color: var(--pink-400); background: var(--pink-50); }
+    .quiz-opt.correct { background: #d1fae5; border-color: #6ee7b7; }
+    .quiz-opt.wrong { background: #fee2e2; border-color: #fca5a5; }
+    .quiz-result { font-weight: 800; color: var(--pink-600); margin-top: .8rem; font-size: .9rem; }
+    .quiz-nav { display:flex; gap:.5rem; margin-top:.8rem; flex-wrap:wrap; }
+    .quiz-nav button {
+      padding: .4rem .9rem;
+      border-radius: 20px;
+      border: none;
+      background: linear-gradient(135deg,var(--pink-400),var(--pink-600));
+      color: #fff;
+      font-family:'Nunito',sans-serif;
+      font-weight: 700;
+      font-size: .8rem;
+      cursor: pointer;
+    }
+
+    /* ── WORD PUZZLE ── */
+    .puzzle-wrap { margin-bottom: 1.4rem; }
+    .puzzle-sentence {
+      min-height: 52px;
+      background: #fff;
+      border: 2px dashed var(--pink-300);
+      border-radius: 12px;
+      padding: .8rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      align-items: center;
+      margin-bottom: .8rem;
+      cursor: pointer;
+    }
+    .puzzle-word-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .4rem;
+      margin-bottom: .8rem;
+    }
+    .puzzle-word {
+      background: linear-gradient(135deg,var(--pink-400),var(--pink-600));
+      color: #fff;
+      padding: .35rem .8rem;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: .84rem;
+      cursor: pointer;
+      transition: transform .15s;
+      user-select: none;
+    }
+    .puzzle-word:hover { transform: scale(1.06); }
+    .puzzle-word.placed {
+      background: var(--pink-100);
+      color: var(--pink-600);
+    }
+    .puzzle-check-btn {
+      padding: .5rem 1.2rem;
+      border-radius: 20px;
+      border: none;
+      background: linear-gradient(135deg,var(--matcha),#3d5a42);
+      color: #fff;
+      font-family:'Nunito',sans-serif;
+      font-weight: 800;
+      font-size: .85rem;
+      cursor: pointer;
+    }
+    .puzzle-result { font-weight: 800; margin-top: .6rem; font-size: .9rem; }
+
+    /* ── GARDEN ── */
+    .garden-wrap {
+      width: 100%;
+      height: 220px;
+      background: linear-gradient(180deg,#e8f5e9 0%,#c8e6c9 100%);
+      border-radius: 16px;
+      border: 2px solid #a5d6a7;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      margin-bottom: .8rem;
+    }
+    .garden-hint {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      color: var(--matcha);
+      font-weight: 700;
+      font-size: .88rem;
+      pointer-events: none;
+      text-align: center;
+    }
+    .garden-flower {
+      position: absolute;
+      font-size: 1.8rem;
+      transform: translateY(20px);
+      opacity: 0;
+      animation: bloomIn .5s forwards;
+      pointer-events: none;
+      user-select: none;
+    }
+    @keyframes bloomIn {
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    /* ── BREATHING ── */
+    .breath-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.4rem;
+    }
+    .breath-circle {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: linear-gradient(135deg,var(--pink-300),var(--pink-500));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fff;
+      cursor: pointer;
+      transition: transform .5s ease, box-shadow .5s ease;
+      box-shadow: 0 8px 32px rgba(232,62,140,.3);
+    }
+    .breath-circle.expand {
+      transform: scale(1.45);
+      box-shadow: 0 16px 60px rgba(232,62,140,.45);
+    }
+    .breath-circle.hold {
+      transform: scale(1.45);
+      box-shadow: 0 16px 60px rgba(107,143,113,.5);
+      background: linear-gradient(135deg,var(--matcha),#3d5a42);
+    }
+    .breath-circle.shrink { transform: scale(.75); }
+    .breath-label {
+      font-size: .88rem;
+      color: var(--text-mid);
+      font-weight: 600;
+      text-align: center;
+    }
+    .breath-btn {
+      padding: .6rem 1.4rem;
+      border-radius: 24px;
+      border: none;
+      background: linear-gradient(135deg,var(--pink-400),var(--pink-600));
+      color: #fff;
+      font-family:'Nunito',sans-serif;
+      font-weight: 800;
+      font-size: .9rem;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(232,62,140,.4);
+      transition: transform .15s;
+    }
+    .breath-btn:hover { transform: scale(1.04); }
+
+    /* Progress bar */
+    .progress-bar-wrap {
+      width: 100%;
+      height: 14px;
+      background: var(--pink-100);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: .5rem;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg,var(--pink-300),var(--pink-500));
+      border-radius: 10px;
+      transition: width 1s ease;
+    }
+
+    /* ── CATCH GAME ── */
+    .catch-game-wrap {
+      position: relative;
+      width: 100%;
+      height: 280px;
+      background: linear-gradient(180deg,#fce4ec,#f8bbd0);
+      border-radius: 16px;
+      border: 2px solid var(--pink-200);
+      overflow: hidden;
+      margin-bottom: .5rem;
+    }
+    .catch-score, .catch-timer {
+      position: absolute;
+      top: .7rem;
+      font-size: .82rem;
+      font-weight: 800;
+      color: var(--pink-600);
+      background: rgba(255,255,255,.7);
+      padding: .25rem .7rem;
+      border-radius: 20px;
+    }
+    .catch-score { left: .7rem; }
+    .catch-timer { right: .7rem; }
+    .catch-start-btn {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      padding: .7rem 1.6rem;
+      border-radius: 24px;
+      border: none;
+      background: linear-gradient(135deg,var(--pink-400),var(--pink-600));
+      color: #fff;
+      font-family:'Nunito',sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(232,62,140,.4);
+    }
+    .falling-item {
+      position: absolute;
+      font-size: 2rem;
+      top: -40px;
+      animation: fall linear forwards;
+      cursor: pointer;
+      user-select: none;
+      transition: transform .1s, opacity .1s;
+    }
+    @keyframes fall {
+      to { top: 105%; }
+    }
+    .catch-end-msg {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      text-align: center;
+      display: none;
+    }
+
+    /* ── CELEBRATION ── */
+    .celebration-wrap {
+      text-align: center;
+      padding: 1.5rem;
+      background: linear-gradient(135deg,#fff8e1,#fce4ec);
+      border-radius: 16px;
+      margin-bottom: 1.4rem;
+    }
+    .celebration-emoji { font-size: 2.2rem; margin-bottom: .5rem; }
+    .celebration-text { font-size: 1.4rem; font-weight: 900; color: var(--pink-600); font-family:'Playfair Display',serif; }
+    .celebration-sub { font-size: .85rem; color: var(--text-mid); margin-top: .5rem; line-height: 1.6; }
+
+    /* ── CHECKLIST ── */
+    .checklist { list-style: none; margin-bottom: 1.4rem; display:flex; flex-direction:column; gap:.5rem; }
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      background: var(--pink-50);
+      border-radius: 10px;
+      padding: .65rem .9rem;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .checklist li:hover { background: var(--pink-100); }
+    .checklist li.done { opacity: .6; }
+    .check-box {
+      width: 20px; height: 20px;
+      border-radius: 6px;
+      border: 2px solid var(--pink-300);
+      flex-shrink: 0;
+      display:flex; align-items:center; justify-content:center;
+      font-size: .75rem; color: #fff;
+      transition: background .2s, border-color .2s;
+    }
+    .checklist li.done .check-box {
+      background: var(--pink-400);
+      border-color: var(--pink-400);
+    }
+    .checklist li.done .check-box::after { content:'✓'; }
+    .checklist li span { font-size: .85rem; color: var(--text-dark); font-weight: 600; }
+
+    /* ── BOOK RECS ── */
+    .book-card {
+      background: var(--pink-50);
+      border-radius: 12px;
+      padding: .9rem 1rem;
+      border: 1.5px solid var(--pink-100);
+      display: flex;
+      gap: .8rem;
+      align-items: flex-start;
+      margin-bottom: .6rem;
+    }
+    .book-card-emoji { font-size: 2rem; flex-shrink:0; }
+    .book-title { font-weight: 800; color: var(--text-dark); font-size: .9rem; }
+    .book-author { font-size: .78rem; color: var(--pink-400); font-weight: 700; margin-bottom: .15rem; }
+    .book-desc { font-size: .8rem; color: var(--text-mid); line-height: 1.5; }
+
+    /* Stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .8rem;
+      margin-bottom: 1.4rem;
+    }
+    .stat-card {
+      background: var(--pink-50);
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      border: 1.5px solid var(--pink-100);
+    }
+    .stat-icon { font-size: 1.8rem; margin-bottom: .2rem; }
+    .stat-val { font-weight: 800; color: var(--text-dark); font-size: 1rem; }
+    .stat-sub { font-size: .72rem; color: var(--text-mid); }
+
+    /* Confetti canvas */
+    #confettiCanvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    @media (max-width: 520px) {
+      .modal-body-inner { padding: 1.2rem 1rem; }
+      .fact-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="confettiCanvas"></canvas>
+
+<div class="topbar">
+  <h1>🧪 Coba Semua Fitur</h1>
+  <p>Semangat Ecaaak — Energy Recharge Week 13–18 Juli 2026</p>
+</div>
+
+<!-- DAY TABS -->
+<div class="day-tabs">
+  <button class="day-tab active" onclick="switchDay(1)">🎨 Hari 1</button>
+  <button class="day-tab" onclick="switchDay(2)">🍵 Hari 2</button>
+  <button class="day-tab" onclick="switchDay(3)">📚 Hari 3</button>
+  <button class="day-tab" onclick="switchDay(4)">🌸 Hari 4</button>
+  <button class="day-tab" onclick="switchDay(5)">💨 Hari 5</button>
+  <button class="day-tab" onclick="switchDay(6)">🎉 Hari 6</button>
+</div>
+
+<!-- ═══════════════ DAY 1 ═══════════════ -->
+<div class="day-panel active" id="panel-1">
+  <div class="content-card">
+    <div class="modal-day-header d1-hdr">
+      <div class="modal-day-emoji">🎨</div>
+      <div class="modal-day-label">Hari ke-1 • Senin 13 Juli</div>
+      <div class="modal-day-title">Hai Ecaaak, Selamat Datang! 🌸</div>
+    </div>
+    <div class="modal-body-inner">
+      <div class="quote-card">
+        "Setiap hari yang baru adalah kanvas kosong — dan kamu adalah seniman terhebatnya."
+        <div class="quote-author">— Dari yang selalu percaya padamu 💕</div>
+      </div>
+      <div class="love-letter">
+        Ecaaak,<br/><br/>
+        Aku tahu minggu ini bakal <strong>super padat</strong> — rapat dari jam 17.00 sampai malam setelah pulang kampus itu bukan hal kecil. Tapi aku lihat kamu, dan kamu selalu bisa melewati setiap tantangan dengan senyum ceriamu yang khas 🌸<br/><br/>
+        Untuk hari ini, aku minta kamu <strong>melukis apa saja</strong> di kanvas di bawah ini. Nggak harus bagus, nggak ada penilaian — ini waktumu untuk bersenang-senang! 🎨
+      </div>
+
+      <div class="game-title">🎨 Kanvas Digitalmu</div>
+      <canvas id="drawCanvas" width="600" height="220"></canvas>
+      <div class="draw-controls">
+        <div class="color-btn active" style="background:#ff80b5" data-color="#ff80b5" data-canvas="drawCanvas"></div>
+        <div class="color-btn" style="background:#e83e8c" data-color="#e83e8c" data-canvas="drawCanvas"></div>
+        <div class="color-btn" style="background:#c2185b" data-color="#c2185b" data-canvas="drawCanvas"></div>
+        <div class="color-btn" style="background:#6b8f71" data-color="#6b8f71" data-canvas="drawCanvas"></div>
+        <div class="color-btn" style="background:#42a5f5" data-color="#42a5f5" data-canvas="drawCanvas"></div>
+        <div class="color-btn" style="background:#ffd54f" data-color="#ffd54f" data-canvas="drawCanvas"></div>
+        <div class="color-btn" style="background:#333;border:2px solid #eee" data-color="#333" data-canvas="drawCanvas"></div>
+        <div class="color-btn" style="background:#fff;border:2px solid #ddd" data-color="#ffffff" data-canvas="drawCanvas"></div>
+        <input type="range" class="size-slider" id="brushSize1" min="2" max="30" value="6" />
+        <button class="draw-btn" onclick="clearCanvas('drawCanvas','brushSize1')">🗑️ Hapus</button>
+        <button class="draw-btn" onclick="saveCanvas('drawCanvas')">💾 Simpan</button>
+      </div>
+
+      <div class="tip-box">
+        <h4>💡 Tips buat Ecaaak</h4>
+        <p>Setelah rapat malam ini, ingat untuk minum air putih, istirahatkan matamu dari layar selama 5 menit, dan tidur tepat waktu ya! Kamu perlu tenagamu untuk esok hari 🍵</p>
+      </div>
+
+      <ul class="checklist" id="cl1">
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Minum 1 gelas air sebelum rapat 💧</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Bawa camilan kesukaan ke rapat 🍜</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Senyum dulu sebelum masuk ruangan rapat 😊</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Pulang dengan kepala tegak — kamu keren banget! 🌸</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ DAY 2 ═══════════════ -->
+<div class="day-panel" id="panel-2">
+  <div class="content-card">
+    <div class="modal-day-header d2-hdr">
+      <div class="modal-day-emoji">🍵</div>
+      <div class="modal-day-label">Hari ke-2 • Selasa 14 Juli</div>
+      <div class="modal-day-title">Fakta Matcha &amp; Kuis Seru! 🌿</div>
+    </div>
+    <div class="modal-body-inner">
+      <div class="quote-card">
+        "Kamu seperti matcha — kadang terasa pahit saat berjuang, tapi hasilnya selalu luar biasa."
+        <div class="quote-author">— Untukmu, Ecaaak 💕</div>
+      </div>
+      <div class="love-letter">
+        Ecaaak,<br/><br/>
+        Hari kedua dan kamu masih berdiri kuat! 🎉 Sambil istirahat sebentar, aku minta kamu main kuis <strong>matcha</strong> dulu — siapa tahu kamu jadi master matcha setelah ini! Dan ingat, secangkir matcha hangat itu combo sempurna untuk recharge energimu 🍵📚
+      </div>
+
+      <div class="fact-grid">
+        <div class="fact-card"><div class="fact-icon">🌿</div><h4>Antioksidan Tinggi</h4><p>Matcha punya 137x lebih banyak antioksidan dibanding teh hijau biasa!</p></div>
+        <div class="fact-card"><div class="fact-icon">🧠</div><h4>Bikin Fokus</h4><p>L-theanine dalam matcha meningkatkan fokus dan ketenangan tanpa membuat gelisah.</p></div>
+        <div class="fact-card"><div class="fact-icon">🌱</div><h4>Warna Hijau Alami</h4><p>Warna hijau terangnya berasal dari klorofil yang diproduksi saat daun diteduhkan.</p></div>
+        <div class="fact-card"><div class="fact-icon">🇯🇵</div><h4>Ritual 900 Tahun</h4><p>Tradisi minum matcha dalam upacara teh Jepang sudah ada sejak abad ke-12!</p></div>
+      </div>
+
+      <div class="quiz-box">
+        <div class="game-title">🎯 Kuis Matcha — Jawab yuk!</div>
+        <div id="quizContent2"></div>
+        <div class="quiz-result" id="quizResult2"></div>
+        <div class="quiz-nav">
+          <button onclick="prevQuestion()">← Sebelumnya</button>
+          <button onclick="nextQuestion()">Selanjutnya →</button>
+          <button onclick="resetQuiz()">🔄 Ulangi</button>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <h4>🍵 Resep Matcha Latte untuk Ecaaak</h4>
+        <p>Campurkan 1 sdt bubuk matcha + 2 sdm air panas, aduk rata. Tambahkan 200ml susu oat hangat, sedikit madu. Nikmati saat istirahat rapat! 🌿✨</p>
+      </div>
+
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Minum segelas matcha atau teh hangat hari ini 🍵</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Ambil 10 napas dalam sebelum rapat dimulai 🌬️</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Kirim pesan ke orang yang kamu sayangi 💌</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Bangga dengan dirimu sendiri hari ini 🌟</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ DAY 3 ═══════════════ -->
+<div class="day-panel" id="panel-3">
+  <div class="content-card">
+    <div class="modal-day-header d3-hdr">
+      <div class="modal-day-emoji">📚</div>
+      <div class="modal-day-label">Hari ke-3 • Rabu 15 Juli</div>
+      <div class="modal-day-title">Midweek! Susun Kata Semangatmu 📖</div>
+    </div>
+    <div class="modal-body-inner">
+      <div class="quote-card">
+        "Di tengah perjalanan yang panjang, ingatlah mengapa kamu mulai — dan itu sudah cukup untuk terus maju."
+        <div class="quote-author">— Untuk Ecaaak yang pantang menyerah 🌸</div>
+      </div>
+      <div class="love-letter">
+        Ecaaak,<br/><br/>
+        Hari ketiga — <strong>kamu sudah sampai tengah perjalanan!</strong> Itu bukan hal kecil loh. Kayak buku yang kamu lagi baca, rasa penasarannya makin besar di tengah cerita kan? Begitu juga minggu ini — makin ke sini, makin dekat ke akhir yang indah 📚🌸<br/><br/>
+        Main puzzle kata bareng aku yuk! Susun kata-kata ini jadi kalimat penyemangat spesial buat kamu 🧩
+      </div>
+
+      <div class="game-title">🧩 Puzzle Kata — Susun jadi kalimat!</div>
+      <div class="puzzle-wrap">
+        <div style="margin-bottom:.5rem;font-size:.82rem;color:var(--text-mid);">Klik kata-kata di bawah untuk menyusunnya:</div>
+        <div class="puzzle-sentence" id="puzzleSentence3" onclick="removePuzzleWord(event)">
+          <span style="color:var(--text-light);font-size:.85rem;">Kalimatmu akan muncul di sini...</span>
+        </div>
+        <div class="puzzle-word-bank" id="puzzleBank3"></div>
+        <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
+          <button class="puzzle-check-btn" onclick="checkPuzzle()">✓ Cek Jawabanku</button>
+          <button class="draw-btn" onclick="resetPuzzle()">🔄 Ulangi</button>
+        </div>
+        <div class="puzzle-result" id="puzzleResult3"></div>
+      </div>
+
+      <div class="game-title">📚 Rekomendasi Buku untuk Ecaaak</div>
+      <div class="book-card">
+        <div class="book-card-emoji">🌸</div>
+        <div><div class="book-title">The Alchemist</div><div class="book-author">Paulo Coelho</div><div class="book-desc">Tentang keberanian mengejar mimpi — cocok banget buat kamu yang ceria dan penuh semangat!</div></div>
+      </div>
+      <div class="book-card">
+        <div class="book-card-emoji">🎨</div>
+        <div><div class="book-title">Big Magic</div><div class="book-author">Elizabeth Gilbert</div><div class="book-desc">Tentang kreativitas dan seni — untuk jiwa seniman dalam dirimu yang bebas berekspresi.</div></div>
+      </div>
+      <div class="book-card">
+        <div class="book-card-emoji">🍵</div>
+        <div><div class="book-title">When Breath Becomes Air</div><div class="book-author">Paul Kalanithi</div><div class="book-desc">Tentang makna hidup dan momen berharga — untuk direnungkan sambil minum matcha.</div></div>
+      </div>
+
+      <ul class="checklist" style="margin-top:1.2rem;">
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Baca minimal 5 halaman buku hari ini 📖</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Tulis 1 hal yang kamu syukuri hari ini 🙏</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Berikan dirimu pujian setelah rapat selesai 🌟</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ DAY 4 ═══════════════ -->
+<div class="day-panel" id="panel-4">
+  <div class="content-card">
+    <div class="modal-day-header d4-hdr">
+      <div class="modal-day-emoji">🌸</div>
+      <div class="modal-day-label">Hari ke-4 • Kamis 16 Juli</div>
+      <div class="modal-day-title">Tamanmu, Tamanku! 🌷</div>
+    </div>
+    <div class="modal-body-inner">
+      <div class="quote-card">
+        "Seperti bunga lily yang tumbuh indah meski di lumpur — kamu mekar paling cantik di tengah kesulitan."
+        <div class="quote-author">— Selalu kagum melihatmu, Ecaaak 🌸</div>
+      </div>
+      <div class="love-letter">
+        Ecaaak,<br/><br/>
+        Hari keempat! Kamu <strong>luar biasa sekali</strong> 🎉 Empat hari dengan rapat panjang, tapi kamu masih berdiri tegak. Aku bangga banget sama kamu 💕<br/><br/>
+        Untuk hari ini, aku buatkan taman bunga virtual khusus buat kamu. Setiap kali kamu klik taman, bunga pink lily akan tumbuh! 🌸🌷
+      </div>
+
+      <div class="game-title">🌸 Taman Lily Virtual Ecaaak</div>
+      <div class="garden-wrap" id="gardenWrap" onclick="plantFlower(event)">
+        <div class="garden-hint" id="gardenHint">✨ Klik di mana saja untuk menumbuhkan bunga! ✨</div>
+      </div>
+      <div style="text-align:center;margin-bottom:1.2rem;">
+        <span style="font-size:.88rem;color:var(--text-mid);">Bunga tumbuh: <strong id="flowerCount">0</strong> 🌸</span>
+        <button class="draw-btn" id="resetGarden" style="margin-left:1rem;" onclick="resetGarden()">🔄 Reset Taman</button>
+      </div>
+
+      <div class="tip-box" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0)">
+        <h4>🌷 Fakta Bunga Lily Pink</h4>
+        <p>Bunga lily pink melambangkan <strong>kasih sayang, kecantikan, dan keberuntungan</strong>. Di banyak budaya, lily adalah simbol wanita yang kuat dan anggun — persis seperti kamu, Ecaaak! 🌸</p>
+      </div>
+
+      <div class="game-title">✏️ Tantangan Menggambar Mini</div>
+      <canvas id="drawCanvas2" width="600" height="180"></canvas>
+      <div class="draw-controls">
+        <div class="color-btn active" style="background:#ff80b5" data-color="#ff80b5" data-canvas="drawCanvas2"></div>
+        <div class="color-btn" style="background:#e83e8c" data-color="#e83e8c" data-canvas="drawCanvas2"></div>
+        <div class="color-btn" style="background:#6b8f71" data-color="#6b8f71" data-canvas="drawCanvas2"></div>
+        <div class="color-btn" style="background:#ffd54f" data-color="#ffd54f" data-canvas="drawCanvas2"></div>
+        <div class="color-btn" style="background:#fff;border:2px solid #eee" data-color="#ffffff" data-canvas="drawCanvas2"></div>
+        <input type="range" class="size-slider" id="brushSize2" min="2" max="30" value="6" />
+        <button class="draw-btn" onclick="clearCanvas('drawCanvas2','brushSize2')">🗑️ Hapus</button>
+      </div>
+      <p style="font-size:.8rem;color:var(--text-light);margin-top:.3rem;margin-bottom:1.2rem;">Tantangan: gambar bunga lily pinkmu sendiri! 🌸</p>
+
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Perhatikan hal indah kecil hari ini 🌺</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Tersenyum pada diri sendiri di cermin 😊</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Ingat: 2 hari lagi dan semuanya selesai! 💪</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ DAY 5 ═══════════════ -->
+<div class="day-panel" id="panel-5">
+  <div class="content-card">
+    <div class="modal-day-header d5-hdr">
+      <div class="modal-day-emoji">💨</div>
+      <div class="modal-day-label">Hari ke-5 • Jumat 17 Juli</div>
+      <div class="modal-day-title">Hampir Sampai, Ecaaak! 🌟</div>
+    </div>
+    <div class="modal-body-inner">
+      <div class="quote-card">
+        "Puncak gunung tidak akan kabur — ia menunggumu dengan sabar. Teruslah melangkah."
+        <div class="quote-author">— Untuk Ecaaak di hari kelima 🏔️💕</div>
+      </div>
+      <div class="love-letter">
+        Ecaaak,<br/><br/>
+        <strong>HARI KELIMA!</strong> 🎊 Kamu hampir sampai di garis akhir! Tinggal satu hari lagi — kamu sudah melewati yang terberatnya dengan sangat indah 🌸<br/><br/>
+        Hari ini aku ingin mengajakmu untuk <strong>bernapas bersama</strong>. Ikuti latihan pernapasan ini — terbukti secara ilmiah bisa menurunkan stres dalam 2 menit saja! 🍃
+      </div>
+
+      <div class="breath-container">
+        <div class="breath-circle" id="breathCircle" onclick="startBreathing()">Mulai</div>
+        <div class="breath-label" id="breathLabel">Tekan lingkaran untuk memulai latihan napas 🌬️</div>
+        <button class="breath-btn" id="breathBtn" onclick="startBreathing()">🌬️ Mulai Latihan Napas</button>
+        <div style="font-size:.8rem;color:var(--text-light);text-align:center;">
+          Sesi: <strong id="breathCount">0</strong>/4 napas
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <h4>🧘 Teknik 4-7-8 untuk Ecaaak</h4>
+        <p>Hirup 4 detik → Tahan 7 detik → Hembuskan 8 detik. Ulangi 4x. Teknik ini menenangkan sistem saraf dan membuatmu lebih fokus untuk rapat malam ini! 💆</p>
+      </div>
+
+      <div class="game-title">💆 Progress Mingguanmu</div>
+      <div style="margin-bottom:.5rem;font-size:.85rem;color:var(--text-mid);">Kamu sudah melewati...</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="weekProgress" style="width:0%"></div>
+      </div>
+      <div style="text-align:center;font-size:.88rem;color:var(--pink-500);font-weight:700;margin-bottom:1.4rem;" id="progressLabel">Menghitung...</div>
+
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-icon">⏰</div><div class="stat-val">5 Hari</div><div class="stat-sub">sudah kamu lalui</div></div>
+        <div class="stat-card"><div class="stat-icon">📝</div><div class="stat-val">5+ Rapat</div><div class="stat-sub">kamu hadiri dengan gagah</div></div>
+        <div class="stat-card"><div class="stat-icon">💪</div><div class="stat-val">100%</div><div class="stat-sub">usaha yang kamu berikan</div></div>
+        <div class="stat-card"><div class="stat-icon">🌸</div><div class="stat-val">∞ Kasih</div><div class="stat-sub">yang aku kirimkan untukmu</div></div>
+      </div>
+
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Lakukan latihan napas 4x hari ini 🌬️</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Makan sesuatu yang enak sebagai reward 🍜</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Ingat: besok adalah hari terakhir! 🎉</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ DAY 6 ═══════════════ -->
+<div class="day-panel" id="panel-6">
+  <div class="content-card">
+    <div class="modal-day-header d6-hdr">
+      <div class="modal-day-emoji">🎉</div>
+      <div class="modal-day-label">Hari ke-6 • Sabtu 18 Juli</div>
+      <div class="modal-day-title">KAMU BERHASIL, Ecaaak!! 🏆</div>
+    </div>
+    <div class="modal-body-inner">
+      <div class="celebration-wrap">
+        <div class="celebration-emoji">🎊🌸🏆🌸🎊</div>
+        <div class="celebration-text">Selamat, Ecaaak!</div>
+        <div class="celebration-sub">Kamu telah melewati 6 hari penuh perjuangan dengan sangat luar biasa.<br/>Kamu kuat, ceria, dan menginspirasi. Aku bangga banget sama kamu! 💕</div>
+      </div>
+
+      <div class="quote-card">
+        "Perjalanan yang paling berat menghasilkan cerita yang paling indah. Dan ceritamu, Ecaaak, adalah yang paling indah yang pernah aku baca."
+        <div class="quote-author">— Dari yang paling bangga padamu di dunia ini 💕🌸</div>
+      </div>
+
+      <div class="love-letter">
+        Ecaaak,<br/><br/>
+        <strong>HARI INI ADALAH HARI TERAKHIR!</strong> 🎉🎊 Kamu sudah melewati 6 hari yang luar biasa — setiap malam rapat dari jam 17.00 sampai 20.00 atau lebih, setelah seharian kampus, dan kamu TETAP berdiri dengan kepala tegak dan senyum ceriamu yang khas.<br/><br/>
+        Kamu adalah wanita yang paling kuat yang aku kenal. Aku cinta kamu, Ecaaak 🌸💕<br/><br/>
+        Sekarang, sebagai hadiah terakhir — <strong>tangkap seblak dan gacoan virtual</strong> sebagai perayaanmu! 🍜🔥
+      </div>
+
+      <div class="game-title">🎮 Tangkap Makanan Favoritmu!</div>
+      <div class="catch-game-wrap" id="catchGameWrap">
+        <div class="catch-score">Skor: <strong id="catchScore">0</strong></div>
+        <div class="catch-timer">Waktu: <strong id="catchTimer">30</strong>s</div>
+        <button class="catch-start-btn" id="catchStartBtn" onclick="startCatchGame()">🍜 Mulai Game!</button>
+        <div class="catch-end-msg" id="catchEndMsg"></div>
+      </div>
+      <p style="font-size:.8rem;color:var(--text-light);margin-top:.3rem;margin-bottom:1.4rem;">Klik makanan yang jatuh untuk menangkapnya! 🎯</p>
+
+      <div class="tip-box" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">
+        <h4>🎊 Rencanakan Hadiahmu!</h4>
+        <p>Kamu berhak makan <strong>seblak</strong> atau <strong>gacoan</strong> favorit sebagai perayaan! Kamu sudah bekerja keras — sekarang saatnya menikmati 🍜🔥 Minta temenin ya!</p>
+      </div>
+
+      <div style="background:linear-gradient(135deg,var(--pink-50),#fce4ec);border-radius:16px;padding:1.5rem;border:1.5px solid var(--pink-200);margin-bottom:1.4rem;text-align:center;">
+        <div style="font-size:2.2rem;margin-bottom:.8rem;">🌸🍵🎨📚🌸</div>
+        <p style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--text-dark);line-height:1.8;">
+          Terima kasih sudah menjadi dirimu sendiri —<br/>
+          si ceria yang suka lily pink, matcha, menggambar, dan membaca.<br/>
+          Kamu sempurna apa adanya, Ecaaak 💕
+        </p>
+        <button class="breath-btn" onclick="launchConfetti()" style="margin-top:1rem;">🎉 Rayakan Bersama!</button>
+      </div>
+
+      <ul class="checklist">
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Makan seblak atau gacoan sebagai reward! 🍜</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Istirahat yang cukup malam ini 😴</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Gambar sesuatu sebagai kenangan minggu ini 🎨</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Ingat kamu luar biasa dan dicintai sepenuhnya 💕</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── TAB SWITCHER ── */
+function switchDay(n) {
+  document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + n).classList.add('active');
+  document.querySelectorAll('.day-tab')[n-1].classList.add('active');
+  if (n === 5) setTimeout(initProgress, 300);
+}
+
+/* ── CHECKLIST ── */
+function toggleCheck(li) {
+  li.classList.toggle('done');
+}
+
+/* ══════════════════════════════════════
+   DRAWING CANVAS
+══════════════════════════════════════ */
+function initCanvas(id, sliderId) {
+  const canvas = document.getElementById(id);
+  if (!canvas || canvas._inited) return;
+  canvas._inited = true;
+  const ctx = canvas.getContext('2d');
+  const resize = () => {
+    const rect = canvas.getBoundingClientRect();
+    const r = window.devicePixelRatio || 1;
+    const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    canvas.width = rect.width * r;
+    canvas.height = rect.height * r;
+    ctx.scale(r, r);
+    ctx.fillStyle = '#fff8fc';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  };
+  resize();
+  window.addEventListener('resize', resize);
+
+  let painting = false;
+  let color = '#ff80b5';
+  let size = 6;
+
+  const pos = e => {
+    const r = canvas.getBoundingClientRect();
+    if (e.touches) return { x: e.touches[0].clientX - r.left, y: e.touches[0].clientY - r.top };
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  };
+
+  canvas.addEventListener('mousedown', e => { painting = true; const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
+  canvas.addEventListener('mousemove', e => {
+    if (!painting) return;
+    const p = pos(e);
+    ctx.lineTo(p.x, p.y);
+    ctx.strokeStyle = color; ctx.lineWidth = size; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.stroke();
+  });
+  canvas.addEventListener('mouseup', () => { painting = false; ctx.beginPath(); });
+  canvas.addEventListener('mouseleave', () => { painting = false; });
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); painting = true; const p = pos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); }, { passive: false });
+  canvas.addEventListener('touchmove', e => {
+    e.preventDefault();
+    if (!painting) return;
+    const p = pos(e);
+    ctx.lineTo(p.x, p.y);
+    ctx.strokeStyle = color; ctx.lineWidth = size; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.stroke();
+  }, { passive: false });
+  canvas.addEventListener('touchend', () => { painting = false; });
+
+  // Color btns for this canvas
+  document.querySelectorAll(`.color-btn[data-canvas="${id}"]`).forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll(`.color-btn[data-canvas="${id}"]`).forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      color = btn.dataset.color;
+    });
+  });
+
+  const slider = document.getElementById(sliderId);
+  if (slider) slider.addEventListener('input', e => size = +e.target.value);
+
+  canvas._setColor = c => color = c;
+}
+
+function clearCanvas(id, sliderId) {
+  const c = document.getElementById(id);
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#fff8fc';
+  ctx.fillRect(0, 0, c.width, c.height);
+}
+
+function saveCanvas(id) {
+  const c = document.getElementById(id);
+  if (!c) return;
+  const a = document.createElement('a');
+  a.download = 'lukisanku-ecaaak.png';
+  a.href = c.toDataURL();
+  a.click();
+}
+
+// Init canvases when page loads
+window.addEventListener('load', () => {
+  initCanvas('drawCanvas', 'brushSize1');
+  initCanvas('drawCanvas2', 'brushSize2');
+});
+
+/* ══════════════════════════════════════
+   QUIZ
+══════════════════════════════════════ */
+const quizData = [
+  { q: 'Apa nama senyawa dalam matcha yang membuat kita tenang namun tetap fokus?', opts: ['Kafein', 'L-theanine', 'Klorofil', 'Tannin'], ans: 1 },
+  { q: 'Matcha tradisional berasal dari negara mana?', opts: ['China', 'Korea', 'Jepang', 'Vietnam'], ans: 2 },
+  { q: 'Berapa kali lebih banyak antioksidan matcha dibanding teh hijau biasa?', opts: ['10x', '50x', '100x', '137x'], ans: 3 },
+];
+let qIdx = 0, qAnswered = [], qScore = 0;
+
+function renderQuiz() {
+  const box = document.getElementById('quizContent2');
+  const res = document.getElementById('quizResult2');
+  if (qIdx >= quizData.length) {
+    box.innerHTML = `<div style="text-align:center;padding:1rem;font-size:1.1rem;font-weight:800;color:var(--pink-600);">🎉 Selesai! Skor: ${qScore}/${quizData.length}</div>`;
+    res.textContent = qScore === 3 ? '🏆 Master Matcha! Kamu luar biasa!' : qScore >= 2 ? '🌸 Bagus sekali!' : '😊 Tetap semangat belajar!';
+    return;
+  }
+  const q = quizData[qIdx];
+  const chosen = qAnswered[qIdx];
+  box.innerHTML = `
+    <div class="quiz-question">Soal ${qIdx+1}/${quizData.length}: ${q.q}</div>
+    ${q.opts.map((o,i) => `<button class="quiz-opt${chosen!==undefined?(i===q.ans?' correct':(i===chosen?' wrong':'')):(chosen===i?' chosen':'')}" onclick="answerQuiz(${i})" ${chosen!==undefined?'disabled':''}>${o}</button>`).join('')}
+  `;
+  res.textContent = chosen !== undefined ? (chosen === q.ans ? '✅ Benar!' : `❌ Salah. Jawaban: ${q.opts[q.ans]}`) : '';
+}
+
+function answerQuiz(i) {
+  if (qAnswered[qIdx] !== undefined) return;
+  qAnswered[qIdx] = i;
+  if (i === quizData[qIdx].ans) qScore++;
+  renderQuiz();
+}
+function nextQuestion() { if (qIdx < quizData.length) { qIdx++; renderQuiz(); } }
+function prevQuestion() { if (qIdx > 0) { qIdx--; renderQuiz(); } }
+function resetQuiz() { qIdx = 0; qAnswered = []; qScore = 0; renderQuiz(); }
+renderQuiz();
+
+/* ══════════════════════════════════════
+   WORD PUZZLE
+══════════════════════════════════════ */
+const puzzleWords = ['Kamu','adalah','bintang','yang','paling','terang','di','hariku'];
+const puzzleAnswer = 'Kamu adalah bintang yang paling terang di hariku';
+let puzzlePlaced = [];
+let puzzleBank = [...puzzleWords];
+
+function renderPuzzle() {
+  const bank = document.getElementById('puzzleBank3');
+  const sentence = document.getElementById('puzzleSentence3');
+
+  bank.innerHTML = puzzleBank.map((w,i) => `<div class="puzzle-word" onclick="placeWord('${w}',${i})">${w}</div>`).join('');
+  if (puzzlePlaced.length === 0) {
+    sentence.innerHTML = `<span style="color:var(--text-light);font-size:.85rem;">Kalimatmu akan muncul di sini...</span>`;
+  } else {
+    sentence.innerHTML = puzzlePlaced.map((w,i) => `<div class="puzzle-word placed" data-index="${i}">${w}</div>`).join('');
+  }
+  document.getElementById('puzzleResult3').textContent = '';
+}
+
+function placeWord(w, bankIdx) {
+  puzzlePlaced.push(w);
+  puzzleBank.splice(bankIdx, 1);
+  renderPuzzle();
+}
+
+function removePuzzleWord(e) {
+  const el = e.target.closest('.puzzle-word.placed');
+  if (!el) return;
+  const i = +el.dataset.index;
+  const word = puzzlePlaced[i];
+  puzzlePlaced.splice(i, 1);
+  puzzleBank.push(word);
+  renderPuzzle();
+}
+
+function checkPuzzle() {
+  const res = document.getElementById('puzzleResult3');
+  const formed = puzzlePlaced.join(' ');
+  if (formed === puzzleAnswer) {
+    res.textContent = '🎉 Benar! Kamu adalah bintang yang paling terang di hariku 🌟';
+    res.style.color = 'var(--matcha)';
+  } else if (puzzlePlaced.length === 0) {
+    res.textContent = '💡 Susun kata-katanya dulu ya!';
+    res.style.color = 'var(--text-mid)';
+  } else {
+    res.textContent = '🤔 Belum tepat, coba susun ulang!';
+    res.style.color = 'var(--pink-500)';
+  }
+}
+
+function resetPuzzle() {
+  puzzlePlaced = [];
+  puzzleBank = [...puzzleWords];
+  // Shuffle bank
+  puzzleBank.sort(() => Math.random() - 0.5);
+  renderPuzzle();
+}
+
+// Init puzzle with shuffled words
+(function() {
+  puzzleBank.sort(() => Math.random() - 0.5);
+  renderPuzzle();
+})();
+
+/* ══════════════════════════════════════
+   VIRTUAL GARDEN
+══════════════════════════════════════ */
+let flowerCount = 0;
+const flowers = ['🌸','🌷','🌺','🌼','💐','🌹'];
+
+function plantFlower(e) {
+  const wrap = document.getElementById('gardenWrap');
+  const hint = document.getElementById('gardenHint');
+  const rect = wrap.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  const f = document.createElement('div');
+  f.className = 'garden-flower';
+  f.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+  f.style.left = (x - 16) + 'px';
+  f.style.top = (y - 16) + 'px';
+  wrap.appendChild(f);
+
+  flowerCount++;
+  document.getElementById('flowerCount').textContent = flowerCount;
+  if (hint) hint.style.display = 'none';
+}
+
+function resetGarden() {
+  const wrap = document.getElementById('gardenWrap');
+  wrap.querySelectorAll('.garden-flower').forEach(f => f.remove());
+  flowerCount = 0;
+  document.getElementById('flowerCount').textContent = 0;
+  document.getElementById('gardenHint').style.display = 'block';
+}
+
+/* ══════════════════════════════════════
+   BREATHING EXERCISE
+══════════════════════════════════════ */
+let breathRunning = false;
+let breathSessions = 0;
+
+function startBreathing() {
+  if (breathRunning) return;
+  breathRunning = true;
+  breathSessions = 0;
+  document.getElementById('breathCount').textContent = 0;
+  document.getElementById('breathBtn').disabled = true;
+  runBreathCycle();
+}
+
+function runBreathCycle() {
+  if (breathSessions >= 4) {
+    const circle = document.getElementById('breathCircle');
+    const label = document.getElementById('breathLabel');
+    circle.className = 'breath-circle';
+    circle.textContent = '🌸';
+    label.textContent = '✅ Selesai! Kamu luar biasa, Ecaaak 🌸';
+    document.getElementById('breathBtn').disabled = false;
+    breathRunning = false;
+    return;
+  }
+  const circle = document.getElementById('breathCircle');
+  const label = document.getElementById('breathLabel');
+
+  // Inhale 4s
+  circle.className = 'breath-circle expand';
+  circle.textContent = 'Hirup...';
+  label.textContent = '🌬️ Hirup... (4 detik)';
+  setTimeout(() => {
+    // Hold 7s
+    circle.className = 'breath-circle hold';
+    circle.textContent = 'Tahan...';
+    label.textContent = '😶 Tahan... (7 detik)';
+    setTimeout(() => {
+      // Exhale 8s
+      circle.className = 'breath-circle shrink';
+      circle.textContent = 'Hembuskan...';
+      label.textContent = '💨 Hembuskan... (8 detik)';
+      setTimeout(() => {
+        breathSessions++;
+        document.getElementById('breathCount').textContent = breathSessions;
+        circle.className = 'breath-circle';
+        circle.textContent = '✨';
+        runBreathCycle();
+      }, 8000);
+    }, 7000);
+  }, 4000);
+}
+
+function initProgress() {
+  const bar = document.getElementById('weekProgress');
+  const label = document.getElementById('progressLabel');
+  if (!bar) return;
+  setTimeout(() => {
+    bar.style.width = '83%';
+    label.textContent = '83% perjalanan minggu sudah kamu taklukkan! 🔥';
+  }, 400);
+}
+
+/* ══════════════════════════════════════
+   CATCH GAME
+══════════════════════════════════════ */
+let catchScore = 0, catchTimerVal = 30, catchInterval = null, catchSpawnInterval = null, catchRunning = false;
+
+function startCatchGame() {
+  const wrap = document.getElementById('catchGameWrap');
+  const startBtn = document.getElementById('catchStartBtn');
+  const endMsg = document.getElementById('catchEndMsg');
+  if (!wrap || catchRunning) return;
+  catchRunning = true; catchScore = 0; catchTimerVal = 30;
+  startBtn.style.display = 'none';
+  endMsg.style.display = 'none';
+  document.getElementById('catchScore').textContent = 0;
+  document.getElementById('catchTimer').textContent = 30;
+
+  const foods = ['🍜','🌶️','🔥','🍳','🫙','🌸','🍵','🎉','💕','🍲'];
+
+  catchSpawnInterval = setInterval(() => {
+    if (!catchRunning) return;
+    const item = document.createElement('div');
+    item.className = 'falling-item';
+    item.textContent = foods[Math.floor(Math.random() * foods.length)];
+    item.style.left = (Math.random() * 80) + '%';
+    const dur = (Math.random() * 2 + 2).toFixed(1);
+    item.style.animationDuration = dur + 's';
+    item.addEventListener('click', () => {
+      if (!catchRunning) return;
+      catchScore++;
+      document.getElementById('catchScore').textContent = catchScore;
+      item.style.transform = 'scale(2.5)';
+      item.style.opacity = '0';
+      setTimeout(() => item.remove(), 200);
+    });
+    wrap.appendChild(item);
+    setTimeout(() => { if (item.parentNode) item.remove(); }, parseFloat(dur) * 1000 + 200);
+  }, 700);
+
+  catchInterval = setInterval(() => {
+    catchTimerVal--;
+    document.getElementById('catchTimer').textContent = catchTimerVal;
+    if (catchTimerVal <= 0) {
+      clearInterval(catchInterval);
+      clearInterval(catchSpawnInterval);
+      catchRunning = false;
+      wrap.querySelectorAll('.falling-item').forEach(e => e.remove());
+      const msg = document.getElementById('catchEndMsg');
+      msg.style.display = 'block';
+      const grade = catchScore >= 20 ? '🏆 Master Seblak!' : catchScore >= 10 ? '🌸 Jago Banget!' : '😊 Keren!';
+      msg.innerHTML = `<div style="font-size:2rem;">${grade}</div><div style="font-weight:800;color:var(--pink-600);font-size:1.1rem;">Skor: ${catchScore} 🎯</div><button class="catch-start-btn" style="position:static;transform:none;margin-top:.5rem;" onclick="startCatchGame()">Main Lagi!</button>`;
+    }
+  }, 1000);
+}
+
+/* ══════════════════════════════════════
+   CONFETTI
+══════════════════════════════════════ */
+function launchConfetti() {
+  const canvas = document.getElementById('confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const particles = Array.from({length: 120}, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * -canvas.height,
+    r: Math.random() * 8 + 4,
+    d: Math.random() * 120 + 60,
+    color: ['#ff80b5','#e83e8c','#ffd54f','#6b8f71','#fff','#42a5f5','#c2185b'][Math.floor(Math.random()*7)],
+    tilt: Math.random() * 10 - 10,
+    tiltAngle: 0,
+    tiltSpeed: Math.random() * .08 + .05,
+    speed: Math.random() * 3 + 2,
+  }));
+
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      p.tiltAngle += p.tiltSpeed;
+      p.y += p.speed;
+      p.tilt = Math.sin(p.tiltAngle) * 12;
+      ctx.beginPath();
+      ctx.lineWidth = p.r;
+      ctx.strokeStyle = p.color;
+      ctx.moveTo(p.x + p.tilt, p.y);
+      ctx.lineTo(p.x + p.tilt + p.r * 0.8, p.y + p.r);
+      ctx.stroke();
+    });
+    frame++;
+    if (frame < 200) requestAnimationFrame(draw);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  draw();
+}
+</script>
+</body>
+</html>

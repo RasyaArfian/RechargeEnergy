@@ -11,6 +11,16 @@ function getWIBDate() {
   return new Date(utc + 7 * 3600000);
 }
 
+function getWIBDateString() {
+  // Returns 'YYYY-MM-DD' in WIB timezone (UTC+7)
+  // NOTE: toISOString() always returns UTC, so we format manually
+  const wib = getWIBDate();
+  const y = wib.getFullYear();
+  const m = String(wib.getMonth() + 1).padStart(2, '0');
+  const d = String(wib.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
 function formatTime(d) {
   return d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
@@ -891,8 +901,7 @@ function initChecklist(id) {
 
 /* ---------- MODAL SYSTEM ---------- */
 function openModal(dayIndex) {
-  const wib = getWIBDate();
-  const today = wib.toISOString().split('T')[0];
+  const today = getWIBDateString();
   const day = DAYS[dayIndex];
 
   if (day.date > today) {
@@ -961,8 +970,7 @@ function showLockedToast() {
 
 /* ---------- RENDER CARDS ---------- */
 function renderCards() {
-  const wib = getWIBDate();
-  const today = wib.toISOString().split('T')[0];
+  const today = getWIBDateString();
   const grid = document.getElementById('cardsGrid');
   if (!grid) return;
 
@@ -995,8 +1003,7 @@ function renderCards() {
 
 /* ---------- TODAY BADGE ---------- */
 function renderTodayBadge() {
-  const wib = getWIBDate();
-  const today = wib.toISOString().split('T')[0];
+  const today = getWIBDateString();
   const badge = document.getElementById('todayBadge');
   if (!badge) return;
 
