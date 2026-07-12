@@ -407,9 +407,9 @@ const contentRenderers = {
 
       <div class="love-letter">
         Ecaaak,<br/><br/>
-        <strong>HARI INI ADALAH HARI TERAKHIR!</strong> 🎉🎊 Kamu sudah melewati 6 hari yang luar biasa — setiap malam rapat dari jam 17.00 sampai 20.00 atau lebih, setelah seharian kampus, dan kamu TETAP berdiri dengan kepala tegak dan senyum ceritamu yang khas.<br/><br/>
-        Kamu adalah wanita yang paling kuat yang aku kenal. Keceriaanmu adalah kekuatanmu, dan hobimu menggambar dan membaca adalah jiwa yang membuatmu begitu indah. Aku cinta kamu,  Ecaaak 🌸💕<br/><br/>
-        Sekarang, sebagai hadiah terakhir — <strong>tangkap seblak dan gacoan virtual</strong> sebagai perayaanmu! Kamu pantas mendapatkan semuanya! 🍜🔥
+        <strong>HARI INI ADALAH HARI TERAKHIR!</strong> 🎉🎊 Kamu udaa melewati 6 hari yang luar biasa — setiap malam rapat, setelah seharian kampus, dan kamu TETAP berdiri dengan kepala tegak dan senyum ceriamu terus dibarengi dengan ceritamu yang khas.<br/><br/>
+        Kamu adalah wanita yang paling kuat yang aku kenal. Keceriaanmu adalah kekuatanmu, dan hobimu menggambar dan membaca adalah jiwa yang membuatmu begitu indah.<br/><br/>
+        Sekarang, sebagai hadiah terakhir — <strong>tangkap seblak dan gacoan</strong> sebagai perayaanmu! Kamu pantas mendapatkan semuanya! 🍜🔥
       </div>
 
       <div class="game-title">🎮 Tangkap Makanan Favoritmu!</div>
