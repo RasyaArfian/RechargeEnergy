@@ -1083,7 +1083,7 @@ window.startCatchGame = startCatchGame;
    ============================================================ */
 (function () {
   // ── Video ID for "Malapetaka - Juicy Luicy" ──
-  const VIDEO_ID = 'gCYcHz2k5x0';
+  const VIDEO_ID = 'kL2-QNLQvqs'; // Malapetaka - Juicy Luicy (Official)
 
   let ytPlayer = null;
   let isPlaying = false;
