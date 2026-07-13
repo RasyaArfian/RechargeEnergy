@@ -140,9 +140,9 @@ const contentRenderers = {
         <p>Setelah rapat malam ini, ingat untuk minum air putih, istirahatkan matamu dari layar selama 5 menit, dan tidur tepat waktu ya! Kamu perlu tenagamu untuk esok hari 🍵</p>
       </div>
 
-      <ul class="checklist" id="checklist-d1">
+      <ul class="checklist" id="checklist-day1">
         <li data-key="d1c1"><div class="check-box"></div><span>Minum 1 gelas air sebelum rapat 💧</span></li>
-        <li data-key="d1c2"><div class="check-box"></div><span>Bawa camilan kesukaanku ke rapat 🍜</span></li>
+        <li data-key="d1c2"><div class="check-box"></div><span>Bawa camilan kesukaan ke rapat 🍜</span></li>
         <li data-key="d1c3"><div class="check-box"></div><span>Senyum dulu sebelum masuk ruangan rapat 😊</span></li>
         <li data-key="d1c4"><div class="check-box"></div><span>Pulang dengan kepala tegak — kamu keren banget! 🌸</span></li>
       </ul>
@@ -202,7 +202,7 @@ const contentRenderers = {
         <p>Campurkan 1 sdt bubuk matcha + 2 sdm air panas, aduk rata. Tambahkan 200ml susu oat hangat, sedikit madu. Nikmati saat istirahat rapat! 🌿✨</p>
       </div>
 
-      <ul class="checklist" id="checklist-d2">
+      <ul class="checklist" id="checklist-day2">
         <li data-key="d2c1"><div class="check-box"></div><span>Minum segelas matcha atau teh hangat hari ini 🍵</span></li>
         <li data-key="d2c2"><div class="check-box"></div><span>Ambil 10 napas dalam sebelum rapat dimulai 🌬️</span></li>
         <li data-key="d2c3"><div class="check-box"></div><span>Kirim pesan ke orang yang kamu 💌</span></li>
@@ -265,7 +265,7 @@ const contentRenderers = {
         </div>
       </div>
 
-      <ul class="checklist" id="checklist-d3">
+      <ul class="checklist" id="checklist-day3">
         <li data-key="d3c1"><div class="check-box"></div><span>Baca minimal 5 halaman buku hari ini 📖</span></li>
         <li data-key="d3c2"><div class="check-box"></div><span>Tulis 1 hal yang kamu syukuri hari ini 🙏</span></li>
         <li data-key="d3c3"><div class="check-box"></div><span>Berikan dirimu pujian setelah rapat selesai 🌟</span></li>
@@ -320,7 +320,7 @@ const contentRenderers = {
       </div>
       <p style="font-size:.8rem;color:var(--text-light);margin-top:.5rem;">Tantangan: gambar bunga lily pinkmu sendiri! 🌸</p>
 
-      <ul class="checklist" style="margin-top:1.5rem;" id="checklist-d4">
+      <ul class="checklist" style="margin-top:1.5rem;" id="checklist-day4">
         <li data-key="d4c1"><div class="check-box"></div><span>Perhatikan hal indah kecil hari ini 🌺</span></li>
         <li data-key="d4c2"><div class="check-box"></div><span>Tersenyum pada diri sendiri di cermin 😊</span></li>
         <li data-key="d4c3"><div class="check-box"></div><span>Ingat: 2 hari lagi dan semuanya selesai! 💪</span></li>
@@ -384,7 +384,7 @@ const contentRenderers = {
         `).join('')}
       </div>
 
-      <ul class="checklist" id="checklist-d5">
+      <ul class="checklist" id="checklist-day5">
         <li data-key="d5c1"><div class="check-box"></div><span>Lakukan latihan napas 4x hari ini 🌬️</span></li>
         <li data-key="d5c2"><div class="check-box"></div><span>Makan sesuatu yang enak sebagai reward 🍜</span></li>
         <li data-key="d5c3"><div class="check-box"></div><span>Ingat: besok adalah hari terakhir! 🎉</span></li>
@@ -447,7 +447,7 @@ const contentRenderers = {
         <button class="breath-btn" id="launchConfetti" style="margin-top:1rem;">🎉 Rayakan Bersama!</button>
       </div>
 
-      <ul class="checklist" id="checklist-d6">
+      <ul class="checklist" id="checklist-day6">
         <li data-key="d6c1"><div class="check-box"></div><span>Makan seblak atau gacoan sebagai reward! 🍜</span></li>
         <li data-key="d6c2"><div class="check-box"></div><span>Istirahat yang cukup malam ini 😴</span></li>
         <li data-key="d6c3"><div class="check-box"></div><span>Gambar sesuatu sebagai kenangan minggu ini 🎨</span></li>
@@ -595,34 +595,38 @@ function initDrawingCanvas() {
   }, { passive: false });
   canvas.addEventListener('touchend', () => { painting = false; });
 
-  // Color buttons
-  document.querySelectorAll('.color-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentColor = btn.dataset.color;
+  // Color buttons — scope to canvas container to avoid conflict with Day 4
+  const controls = document.getElementById('drawControls');
+  if (controls) {
+    controls.querySelectorAll('.color-btn').forEach(btn => {
+      btn.onclick = () => {
+        controls.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentColor = btn.dataset.color;
+      };
     });
-  });
+  }
 
   // Brush size
   const sizeSlider = document.getElementById('brushSize');
-  if (sizeSlider) sizeSlider.addEventListener('input', e => brushSize = parseInt(e.target.value));
+  if (sizeSlider) sizeSlider.oninput = e => brushSize = parseInt(e.target.value);
 
   // Clear
   const clearBtn = document.getElementById('clearCanvas');
-  if (clearBtn) clearBtn.addEventListener('click', () => {
+  if (clearBtn) clearBtn.onclick = () => {
+    const rect = canvas.getBoundingClientRect();
     ctx.fillStyle = '#fff8fc';
-    ctx.fillRect(0, 0, canvas.getBoundingClientRect().width, canvas.getBoundingClientRect().height);
-  });
+    ctx.fillRect(0, 0, rect.width, rect.height);
+  };
 
   // Save
   const saveBtn = document.getElementById('saveCanvas');
-  if (saveBtn) saveBtn.addEventListener('click', () => {
+  if (saveBtn) saveBtn.onclick = () => {
     const a = document.createElement('a');
-    a.download = 'lukisan- Ecaaak.png';
+    a.download = 'lukisan-Ecaaak.png';
     a.href = canvas.toDataURL();
     a.click();
-  });
+  };
 }
 
 /* ---------- QUIZ ---------- */
@@ -635,6 +639,11 @@ function initQuiz() {
   if (!box) return;
   currentQuizIdx = 0;
   quizScore = 0;
+  const res = document.getElementById('quizResult');
+  if (res) {
+    res.style.display = 'none';
+    res.innerHTML = '';
+  }
   renderQuizQuestion();
 }
 
@@ -675,9 +684,24 @@ function renderQuizQuestion() {
 let puzzleSelected = [];
 
 function initPuzzle() {
+  const checkBtn = document.getElementById('puzzleCheck');
+  const resetBtn = document.getElementById('puzzleReset');
+  if (!checkBtn || !resetBtn) return;
+
+  checkBtn.onclick = checkPuzzle;
+  resetBtn.onclick = () => {
+    const res = document.getElementById('puzzleResult');
+    if (res) res.textContent = '';
+    setupPuzzleBoard();
+  };
+
+  setupPuzzleBoard();
+}
+
+function setupPuzzleBoard() {
   const bankEl = document.getElementById('puzzleWordBank');
   const sentenceEl = document.getElementById('puzzleSentence');
-  if (!bankEl) return;
+  if (!bankEl || !sentenceEl) return;
 
   puzzleSelected = [];
   const shuffled = [...puzzleWords].sort(() => Math.random() - .5);
@@ -686,18 +710,12 @@ function initPuzzle() {
   sentenceEl.innerHTML = '<span style="color:var(--text-light);font-size:.85rem;">Kalimatmu akan muncul di sini...</span>';
 
   bankEl.querySelectorAll('.puzzle-word').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.onclick = () => {
       if (btn.classList.contains('used')) return;
       btn.classList.add('used');
       puzzleSelected.push(btn.dataset.word);
       renderSentence();
-    });
-  });
-
-  document.getElementById('puzzleCheck').addEventListener('click', checkPuzzle);
-  document.getElementById('puzzleReset').addEventListener('click', () => {
-    document.getElementById('puzzleResult').textContent = '';
-    initPuzzle();
+    };
   });
 }
 
@@ -730,7 +748,7 @@ let breathAnimTimeout = null;
 function initBreathing() {
   const btn = document.getElementById('breathBtn');
   if (!btn) return;
-  btn.addEventListener('click', toggleBreath);
+  btn.onclick = toggleBreath;
   animateProgress();
 }
 
@@ -746,9 +764,11 @@ function toggleBreath() {
   } else {
     btn.textContent = '🌬️ Mulai Latihan Napas';
     clearTimeout(breathAnimTimeout);
-    circle.classList.remove('breathing');
-    circle.textContent = 'Lanjut?';
-    label.textContent = 'Tekan tombol untuk melanjutkan 🌬️';
+    if (circle) {
+      circle.classList.remove('expand', 'hold', 'shrink');
+      circle.textContent = 'Lanjut?';
+    }
+    if (label) label.textContent = 'Tekan tombol untuk melanjutkan 🌬️';
   }
 }
 
@@ -759,9 +779,9 @@ function runBreathCycle() {
   const countEl = document.getElementById('breathCount');
 
   const steps = [
-    { text: 'Hirup...', label: 'Hirup perlahan — 4 detik 🌬️', dur: 4000, class: 'breathing' },
-    { text: 'Tahan...', label: 'Tahan napas — 7 detik 🤫', dur: 7000, class: '' },
-    { text: 'Hembuskan', label: 'Hembuskan perlahan — 8 detik 💨', dur: 8000, class: '' },
+    { text: 'Hirup...', label: 'Hirup perlahan — 4 detik 🌬️', dur: 4000, class: 'expand' },
+    { text: 'Tahan...', label: 'Tahan napas — 7 detik 🤫', dur: 7000, class: 'hold' },
+    { text: 'Hembuskan', label: 'Hembuskan perlahan — 8 detik 💨', dur: 8000, class: 'shrink' },
   ];
 
   let stepIdx = 0;
@@ -771,20 +791,26 @@ function runBreathCycle() {
       breathSessionCount++;
       if (countEl) countEl.textContent = breathSessionCount;
       if (breathSessionCount >= 4) {
-        circle.textContent = '✅ Selesai!';
-        circle.classList.remove('breathing');
-        label.textContent = 'Luar biasa! Kamu sudah melakukan 4 siklus napas! 🌸';
+        if (circle) {
+          circle.textContent = '✅ Selesai!';
+          circle.classList.remove('expand', 'hold', 'shrink');
+        }
+        if (label) label.textContent = 'Luar biasa! Kamu sudah melakukan 4 siklus napas! 🌸';
         breathRunning = false;
-        document.getElementById('breathBtn').textContent = '🌬️ Ulangi';
+        const btn = document.getElementById('breathBtn');
+        if (btn) btn.textContent = '🌬️ Ulangi';
         breathSessionCount = 0;
         return;
       }
       stepIdx = 0;
     }
     const s = steps[stepIdx];
-    circle.textContent = s.text;
-    label.textContent = s.label;
-    circle.classList.toggle('breathing', s.class === 'breathing');
+    if (circle) {
+      circle.textContent = s.text;
+      circle.classList.remove('expand', 'hold', 'shrink');
+      if (s.class) circle.classList.add(s.class);
+    }
+    if (label) label.textContent = s.label;
     stepIdx++;
     breathAnimTimeout = setTimeout(nextStep, s.dur);
   };
@@ -814,7 +840,7 @@ function initGarden() {
 
   flowerCount = 0;
 
-  wrap.addEventListener('click', (e) => {
+  wrap.onclick = (e) => {
     if (e.target === resetBtn || resetBtn?.contains(e.target)) return;
     if (hint) hint.style.display = 'none';
     const flower = document.createElement('div');
@@ -823,16 +849,16 @@ function initGarden() {
     wrap.appendChild(flower);
     flowerCount++;
     if (countEl) countEl.textContent = flowerCount;
-  });
+  };
 
   if (resetBtn) {
-    resetBtn.addEventListener('click', (e) => {
+    resetBtn.onclick = (e) => {
       e.stopPropagation();
       document.querySelectorAll('.flower-planted').forEach(f => f.remove());
       flowerCount = 0;
       if (countEl) countEl.textContent = 0;
       if (hint) hint.style.display = 'block';
-    });
+    };
   }
 }
 
@@ -918,8 +944,10 @@ function openModal(dayIndex) {
 
   // Reset game states
   catchRunning = false;
-  catchScore = 0;
+  clearInterval(catchInterval);
+  clearInterval(catchSpawnInterval);
   breathRunning = false;
+  clearTimeout(breathAnimTimeout);
   breathSessionCount = 0;
 
   // Init interactive elements
@@ -933,7 +961,7 @@ function openModal(dayIndex) {
 
     // Day 6 special
     const confettiBtn = document.getElementById('launchConfetti');
-    if (confettiBtn) confettiBtn.addEventListener('click', launchConfetti);
+    if (confettiBtn) confettiBtn.onclick = launchConfetti;
 
     // Week progress animation
     animateProgress();
@@ -1107,7 +1135,7 @@ window.startCatchGame = startCatchGame;
   const volOffIcon   = document.getElementById('volOffIcon');
 
   // ── Called by YouTube API when ready ──
-  window.onYouTubeIframeAPIReady = function () {
+  function initYTPlayer() {
     ytPlayer = new YT.Player('ytPlayer', {
       videoId: VIDEO_ID,
       playerVars: {
@@ -1127,7 +1155,13 @@ window.startCatchGame = startCatchGame;
         onError: onPlayerError
       }
     });
-  };
+  }
+
+  if (window.YT && window.YT.Player) {
+    initYTPlayer();
+  } else {
+    window.onYouTubeIframeAPIReady = initYTPlayer;
+  }
 
   function onPlayerReady(e) {
     playerReady = true;

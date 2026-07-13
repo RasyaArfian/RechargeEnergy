@@ -556,16 +556,23 @@ canvas#drawCanvas {
   font-weight: 800;
   color: #fff;
   cursor: pointer;
-  box-shadow: 0 0 0 0 rgba(232,62,140,.4);
-  transition: transform .1s;
+  box-shadow: 0 8px 32px rgba(232,62,140,.3);
+  transition: transform .5s ease, background .5s ease, box-shadow .5s ease;
   user-select: none;
 }
-.breath-circle.breathing {
-  animation: breathIn 4s ease-in-out infinite alternate;
+.breath-circle.expand {
+  transform: scale(1.4);
+  box-shadow: 0 16px 60px rgba(232,62,140,.45);
+  transition: transform 4s ease-out, background .5s ease, box-shadow .5s ease;
 }
-@keyframes breathIn {
-  from { transform:scale(1); box-shadow:0 0 0 0 rgba(232,62,140,.4); }
-  to   { transform:scale(1.4); box-shadow:0 0 0 30px rgba(232,62,140,0); }
+.breath-circle.hold {
+  transform: scale(1.4);
+  box-shadow: 0 16px 60px rgba(107,143,113,.5);
+  background: radial-gradient(circle, var(--matcha), #3d5a42);
+}
+.breath-circle.shrink {
+  transform: scale(0.85);
+  transition: transform 8s ease-in-out, background .5s ease, box-shadow .5s ease;
 }
 .breath-label {
   font-size: 1rem;
