@@ -506,7 +506,7 @@ const contentRenderers = {
 
       <div class="love-letter">
         Ecaaak,<br/><br/>
-        <strong>HARI INI ADALAH HARI TERAKHIR!</strong> 🎉🎊 Kamu sudah melewati 6 hari yang luar biasa — setiap malam rapat, setelah seharian kampus, dan kamu TETAP berdiri dengan kepala tegak dan senyum ceriamu yang khas.<br/><br/>
+        <strong>HARI INI ADALAH HARI TERAKHIR!</strong> 🎉🎊 Kamu sudah melewati 6 hari yang luar biasa dengan sangat gagah berani — dan kamu TETAP berdiri dengan kepala tegak dan senyum ceriamu yang khas.<br/><br/>
         Kamu adalah wanita yang paling kuat yang aku kenal. Keceriaanmu adalah kekuatanmu, dan hobimu menggambar dan membaca adalah jiwa yang membuatmu begitu indah.<br/><br/>
         Sekarang, sebagai hadiah terakhir — <strong>tangkap makanan favoritmu</strong> dan ada <strong>hadiah spesial Dubai Chewy Cookie</strong> yang menunggumu! 🍜🔥🍪✨
       </div>
