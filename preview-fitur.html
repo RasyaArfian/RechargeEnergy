@@ -900,7 +900,13 @@ function switchDay(n) {
   document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('panel-' + n).classList.add('active');
   document.querySelectorAll('.day-tab')[n-1].classList.add('active');
-  if (n === 5) setTimeout(initProgress, 300);
+  if (n === 4) {
+    initProStudio(document.getElementById('drawCanvasPro'), document.getElementById('previewCanvasPro'));
+  }
+  if (n === 5) {
+    initWritingGame();
+    setTimeout(initProgress, 300);
+  }
 }
 
 /* ── CHECKLIST ── */
@@ -909,7 +915,7 @@ function toggleCheck(li) {
 }
 
 /* ══════════════════════════════════════
-   DRAWING CANVAS
+   DRAWING CANVAS (DAY 1)
 ══════════════════════════════════════ */
 function initCanvas(id, sliderId) {
   const canvas = document.getElementById(id);
@@ -919,7 +925,6 @@ function initCanvas(id, sliderId) {
   const resize = () => {
     const rect = canvas.getBoundingClientRect();
     const r = window.devicePixelRatio || 1;
-    const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
     canvas.width = rect.width * r;
     canvas.height = rect.height * r;
     ctx.scale(r, r);
@@ -960,7 +965,6 @@ function initCanvas(id, sliderId) {
   }, { passive: false });
   canvas.addEventListener('touchend', () => { painting = false; });
 
-  // Color btns for this canvas
   document.querySelectorAll(`.color-btn[data-canvas="${id}"]`).forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll(`.color-btn[data-canvas="${id}"]`).forEach(b => b.classList.remove('active'));
@@ -971,8 +975,6 @@ function initCanvas(id, sliderId) {
 
   const slider = document.getElementById(sliderId);
   if (slider) slider.addEventListener('input', e => size = +e.target.value);
-
-  canvas._setColor = c => color = c;
 }
 
 function clearCanvas(id, sliderId) {
@@ -995,11 +997,233 @@ function saveCanvas(id) {
 // Init canvases when page loads
 window.addEventListener('load', () => {
   initCanvas('drawCanvas', 'brushSize1');
-  initCanvas('drawCanvas2', 'brushSize2');
 });
 
 /* ══════════════════════════════════════
-   QUIZ
+   PRO PAINTING STUDIO (DAY 4)
+══════════════════════════════════════ */
+function initProStudio(canvas, previewCanvas) {
+  if (!canvas || !previewCanvas) return;
+  if (canvas._inited) return;
+  canvas._inited = true;
+  const ctx = canvas.getContext('2d');
+  const pCtx = previewCanvas.getContext('2d');
+  const statusEl = document.getElementById('studioStatus');
+
+  const setupCanvas = (c, cx) => {
+    const rect = c.getBoundingClientRect();
+    const r = window.devicePixelRatio || 1;
+    c.width = rect.width * r;
+    c.height = rect.height * r;
+    cx.scale(r, r);
+  };
+  setupCanvas(canvas, ctx);
+  setupCanvas(previewCanvas, pCtx);
+  ctx.fillStyle = '#fff8fc';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  let tool = 'pen';
+  let color = '#ff80b5';
+  let size = 8;
+  let opacity = 1;
+  let painting = false;
+  let startX = 0, startY = 0;
+  let undoStack = [];
+  let sprayInterval = null;
+
+  const getPos = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    if (e.touches) return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  };
+
+  const saveUndo = () => {
+    if (undoStack.length > 20) undoStack.shift();
+    undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+  };
+
+  const setStatus = (msg) => { if (statusEl) statusEl.textContent = msg; };
+
+  // Tool buttons
+  document.querySelectorAll('.tool-btn').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      tool = btn.dataset.tool;
+      const labels = { pen: '✏️ Pen — klik dan seret untuk menggambar', brush: '🖌️ Brush Lembut — sapuan lembut', spray: '🎨 Spray — tahan untuk efek kabut', eraser: '🗑️ Eraser — hapus area', line: '📏 Garis — klik lalu seret untuk garis lurus', rect: '⬜ Persegi — seret untuk menggambar kotak', circle: '⭕ Lingkaran — seret untuk menggambar lingkaran', fill: '🪣 Fill — klik area untuk mengisi warna' };
+      setStatus(labels[tool] || '');
+    };
+  });
+
+  // Color swatches
+  const colorContainer = document.getElementById('studioColors');
+  if (colorContainer) {
+    colorContainer.querySelectorAll('.color-swatch').forEach(sw => {
+      sw.onclick = () => {
+        colorContainer.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+        sw.classList.add('active');
+        color = sw.dataset.color;
+        const cp = document.getElementById('customColorPicker');
+        if (cp) cp.value = color;
+      };
+    });
+    const cp = document.getElementById('customColorPicker');
+    if (cp) cp.oninput = (e) => { color = e.target.value; colorContainer.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active')); };
+  }
+
+  // Size slider
+  const sizeSlider = document.getElementById('studioSize');
+  const sizeDisp = document.getElementById('sizeDisplay');
+  if (sizeSlider) sizeSlider.oninput = (e) => { size = +e.target.value; if (sizeDisp) sizeDisp.textContent = size + 'px'; };
+
+  // Opacity slider
+  const opSlider = document.getElementById('studioOpacity');
+  const opDisp = document.getElementById('opacityDisplay');
+  if (opSlider) opSlider.oninput = (e) => { opacity = +e.target.value / 100; if (opDisp) opDisp.textContent = e.target.value + '%'; };
+
+  // Draw helpers
+  const hexToRgba = (hex, a) => {
+    const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+    return `rgba(${r},${g},${b},${a})`;
+  };
+
+  const drawSpray = (x, y) => {
+    const density = Math.max(10, size * 3);
+    for (let i = 0; i < density; i++) {
+      const angle = Math.random() * 2 * Math.PI;
+      const rad = Math.random() * size * 1.5;
+      const sx = x + Math.cos(angle) * rad;
+      const sy = y + Math.sin(angle) * rad;
+      ctx.fillStyle = hexToRgba(color, opacity * 0.3);
+      ctx.fillRect(sx, sy, 1.5, 1.5);
+    }
+  };
+
+  const drawShape = (px, py, cx, cy) => {
+    pCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+    pCtx.strokeStyle = hexToRgba(color, opacity);
+    pCtx.lineWidth = size;
+    pCtx.lineCap = 'round';
+    pCtx.beginPath();
+    if (tool === 'line') {
+      pCtx.moveTo(px, py); pCtx.lineTo(cx, cy); pCtx.stroke();
+    } else if (tool === 'rect') {
+      pCtx.strokeRect(px, py, cx - px, cy - py);
+    } else if (tool === 'circle') {
+      const rx = Math.abs(cx - px) / 2, ry = Math.abs(cy - py) / 2;
+      const ex = px + (cx - px) / 2, ey = py + (cy - py) / 2;
+      pCtx.ellipse(ex, ey, rx, ry, 0, 0, Math.PI * 2); pCtx.stroke();
+    }
+  };
+
+  const floodFill = (x, y, fillColor) => {
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imgData.data;
+    const w = canvas.width, h = canvas.height;
+    const px = (Math.round(x * (window.devicePixelRatio || 1)));
+    const py = (Math.round(y * (window.devicePixelRatio || 1)));
+    const idx = (py * w + px) * 4;
+    const tR = data[idx], tG = data[idx+1], tB = data[idx+2], tA = data[idx+3];
+    const fR = parseInt(fillColor.slice(1,3),16), fG = parseInt(fillColor.slice(3,5),16), fB = parseInt(fillColor.slice(5,7),16);
+    if (tR === fR && tG === fG && tB === fB) return;
+    const stack = [[px, py]];
+    while (stack.length) {
+      const [cx2, cy2] = stack.pop();
+      if (cx2 < 0 || cx2 >= w || cy2 < 0 || cy2 >= h) continue;
+      const i = (cy2 * w + cx2) * 4;
+      if (Math.abs(data[i]-tR) > 30 || Math.abs(data[i+1]-tG) > 30 || Math.abs(data[i+2]-tB) > 30) continue;
+      data[i] = fR; data[i+1] = fG; data[i+2] = fB; data[i+3] = 255;
+      stack.push([cx2+1,cy2],[cx2-1,cy2],[cx2,cy2+1],[cx2,cy2-1]);
+    }
+    ctx.putImageData(imgData, 0, 0);
+  };
+
+  // Mouse events
+  const onDown = (e) => {
+    e.preventDefault();
+    const p = getPos(e);
+    painting = true;
+    startX = p.x; startY = p.y;
+    saveUndo();
+
+    if (tool === 'fill') {
+      floodFill(p.x, p.y, color);
+      painting = false;
+      return;
+    }
+    if (tool === 'spray') {
+      drawSpray(p.x, p.y);
+      sprayInterval = setInterval(() => { const p2 = { x: startX, y: startY }; drawSpray(p2.x, p2.y); }, 30);
+    } else if (tool !== 'line' && tool !== 'rect' && tool !== 'circle') {
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+    }
+  };
+
+  const onMove = (e) => {
+    e.preventDefault();
+    if (!painting) return;
+    const p = getPos(e);
+    startX = p.x; startY = p.y;
+
+    if (tool === 'pen') {
+      ctx.strokeStyle = hexToRgba(color, opacity); ctx.lineWidth = size; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.lineTo(p.x, p.y); ctx.stroke();
+    } else if (tool === 'brush') {
+      ctx.strokeStyle = hexToRgba(color, opacity * 0.4); ctx.lineWidth = size * 2.5; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.lineTo(p.x, p.y); ctx.stroke();
+    } else if (tool === 'eraser') {
+      ctx.clearRect(p.x - size/2, p.y - size/2, size, size);
+    } else if (tool === 'line' || tool === 'rect' || tool === 'circle') {
+      drawShape(startX, startY, p.x, p.y);
+    }
+  };
+
+  const onUp = (e) => {
+    if (!painting) return;
+    const p = getPos(e);
+    if (tool === 'line' || tool === 'rect' || tool === 'circle') {
+      ctx.drawImage(previewCanvas, 0, 0, canvas.width/2, canvas.height/2);
+      pCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+    }
+    if (sprayInterval) { clearInterval(sprayInterval); sprayInterval = null; }
+    painting = false;
+    ctx.beginPath();
+  };
+
+  canvas.addEventListener('mousedown', onDown);
+  canvas.addEventListener('mousemove', onMove);
+  canvas.addEventListener('mouseup', onUp);
+  canvas.addEventListener('mouseleave', onUp);
+  canvas.addEventListener('touchstart', onDown, { passive: false });
+  canvas.addEventListener('touchmove', onMove, { passive: false });
+  canvas.addEventListener('touchend', onUp);
+
+  // Action buttons
+  const undoBtn = document.getElementById('undoBtn');
+  if (undoBtn) undoBtn.onclick = () => { if (undoStack.length) { ctx.putImageData(undoStack.pop(), 0, 0); } };
+
+  const clearBtn = document.getElementById('clearCanvas');
+  if (clearBtn) clearBtn.onclick = () => { saveUndo(); ctx.fillStyle = '#fff8fc'; ctx.fillRect(0, 0, canvas.width/2, canvas.height/2); };
+
+  const fillBgBtn = document.getElementById('fillBg');
+  if (fillBgBtn) fillBgBtn.onclick = () => { saveUndo(); ctx.fillStyle = hexToRgba(color, opacity); ctx.fillRect(0, 0, canvas.width/2, canvas.height/2); };
+
+  const saveBtn = document.getElementById('saveCanvas');
+  if (saveBtn) saveBtn.onclick = () => {
+    const merged = document.createElement('canvas');
+    merged.width = canvas.width; merged.height = canvas.height;
+    const mCtx = merged.getContext('2d');
+    mCtx.drawImage(canvas, 0, 0);
+    const a = document.createElement('a');
+    a.download = 'studio-Ecaaak.png'; a.href = merged.toDataURL(); a.click();
+  };
+
+  setStatus('✏️ Pen — Klik dan seret untuk melukis!');
+}
+
+/* ══════════════════════════════════════
+   QUIZ (DAY 2)
 ══════════════════════════════════════ */
 const quizData = [
   { q: 'Apa nama senyawa dalam matcha yang membuat kita tenang namun tetap fokus?', opts: ['Kafein', 'L-theanine', 'Klorofil', 'Tannin'], ans: 1 },
@@ -1037,7 +1261,7 @@ function resetQuiz() { qIdx = 0; qAnswered = []; qScore = 0; renderQuiz(); }
 renderQuiz();
 
 /* ══════════════════════════════════════
-   WORD PUZZLE
+   WORD PUZZLE (DAY 3)
 ══════════════════════════════════════ */
 const puzzleWords = ['Kamu','adalah','bintang','yang','paling','terang','di','hariku'];
 const puzzleAnswer = 'Kamu adalah bintang yang paling terang di hariku';
@@ -1103,90 +1327,187 @@ function resetPuzzle() {
 })();
 
 /* ══════════════════════════════════════
-   VIRTUAL GARDEN
+   WRITING GAME (DAY 5)
 ══════════════════════════════════════ */
-let flowerCount = 0;
-const flowers = ['🌸','🌷','🌺','🌼','💐','🌹'];
+const writingPrompts = {
+  romance: [
+    'Ceritakan tentang pertemuan pertama dua orang yang tak terduga di perpustakaan pada sore yang hujan...',
+    'Ada seorang gadis yang setiap hari menemukan bunga di mejanya, tapi tidak tahu dari siapa...',
+    'Dua sahabat lama bertemu kembali setelah 5 tahun — apa yang terjadi selanjutnya?',
+    'Tulis surat kepada seseorang yang belum pernah kamu temui tapi selalu ada di hatimu...',
+  ],
+  adventure: [
+    'Kamu menemukan peta kuno di buku tua — ke mana peta itu membawamu?',
+    'Dalam perjalanan pulang, kamu tersasar di hutan ajaib. Apa yang kamu temukan?',
+    'Sebuah pintu muncul di kamarmu tiba-tiba — kamu memberanikan diri membukanya...',
+    'Kamu adalah explorer pertama yang menemukan pulau tersembunyi di lautan luas...',
+  ],
+  daily: [
+    'Ceritakan tentang hari paling berkesan dalam hidupmu — dari sudut pandang orang lain...',
+    'Pagi hari yang sempurna menurutmu: bagaimana rasanya, suaranya, baunya?',
+    'Kamu menemukan diary lama dari 5 tahun lalu — apa yang ditulis di sana?',
+    'Deskripsikan momen sederhana yang membuatmu merasa paling hidup...',
+  ],
+  fantasy: [
+    'Di dunia di mana setiap orang punya kekuatan berdasarkan makanan favoritnya — apa kekuatanmu?',
+    'Ada seorang penyihir yang bisa melukis perasaan menjadi nyata — ceritakan kisahnya...',
+    'Kamu adalah penjaga perpustakaan ajaib di mana setiap buku membawamu ke dunia berbeda...',
+    'Seekor naga kecil tiba-tiba tinggal di halaman rumahmu — bagaimana hidupmu berubah?',
+  ],
+  friendship: [
+    'Ceritakan tentang sahabat terbaikmu — momen paling tak terlupakan bersama mereka...',
+    'Dua sahabat yang berjanji akan selalu ada untuk satu sama lain — uji janji itu...',
+    'Tulis tentang persahabatan yang tumbuh dari hal-hal kecil yang tidak terduga...',
+    'Sahabat yang mengerti tanpa perlu berkata-kata — gambarkan momen itu...',
+  ],
+  motivation: [
+    'Tulis surat dari dirimu di masa depan 5 tahun lagi untuk dirimu sekarang...',
+    'Hari paling sulit yang pernah kamu lalui — dan bagaimana kamu bangkit...',
+    'Ceritakan tentang mimpi terbesarmu dan langkah pertama untuk menggapainya...',
+    'Kamu adalah pahlawan dalam ceritamu sendiri — kisah apa yang ingin kamu ceritakan?',
+  ],
+};
 
-function plantFlower(e) {
-  const wrap = document.getElementById('gardenWrap');
-  const hint = document.getElementById('gardenHint');
-  const rect = wrap.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
+let writingTimerInterval = null;
+let writingSeconds = 0;
+let writingStarted = false;
+let selectedCategory = 'romance';
 
-  const f = document.createElement('div');
-  f.className = 'garden-flower';
-  f.textContent = flowers[Math.floor(Math.random() * flowers.length)];
-  f.style.left = (x - 16) + 'px';
-  f.style.top = (y - 16) + 'px';
-  wrap.appendChild(f);
+function initWritingGame() {
+  const wrap = document.getElementById('writingGameWrap');
+  if (!wrap || wrap._inited) return;
+  wrap._inited = true;
 
-  flowerCount++;
-  document.getElementById('flowerCount').textContent = flowerCount;
-  if (hint) hint.style.display = 'none';
+  // Category buttons
+  const catBtns = wrap.querySelectorAll('.category-btn');
+  catBtns.forEach(btn => {
+    btn.onclick = () => {
+      catBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedCategory = btn.dataset.cat;
+      getNewPrompt();
+    };
+  });
+
+  // Get prompt button
+  const promptBtn = document.getElementById('getPromptBtn');
+  if (promptBtn) promptBtn.onclick = getNewPrompt;
+  getNewPrompt();
+
+  // Writing area
+  const textarea = document.getElementById('writingArea');
+  if (textarea) {
+    textarea.addEventListener('input', () => {
+      updateWritingStats(textarea.value);
+      if (!writingStarted && textarea.value.trim().length > 0) {
+        writingStarted = true;
+        startWritingTimer();
+      }
+    });
+    textarea.addEventListener('focus', () => {
+      if (!writingStarted) {
+        writingStarted = true;
+        startWritingTimer();
+      }
+    });
+  }
+
+  // Clear button
+  const clearBtn = document.getElementById('clearWritingBtn');
+  if (clearBtn) clearBtn.onclick = () => {
+    if (textarea) { textarea.value = ''; updateWritingStats(''); }
+    stopWritingTimer();
+    writingStarted = false;
+    writingSeconds = 0;
+    updateTimerDisplay();
+    const res = document.getElementById('writingResult');
+    if (res) { res.style.display = 'none'; }
+  };
+
+  // Save button
+  const saveBtn = document.getElementById('saveWritingBtn');
+  if (saveBtn) saveBtn.onclick = () => {
+    if (!textarea || !textarea.value.trim()) return;
+    const blob = new Blob([textarea.value], { type: 'text/plain;charset=utf-8' });
+    const a = document.createElement('a');
+    a.download = 'cerita-ecaaak.txt'; a.href = URL.createObjectURL(blob); a.click();
+  };
+
+  // Submit button
+  const submitBtn = document.getElementById('submitWritingBtn');
+  if (submitBtn) submitBtn.onclick = evaluateWriting;
 }
 
-function resetGarden() {
-  const wrap = document.getElementById('gardenWrap');
-  wrap.querySelectorAll('.garden-flower').forEach(f => f.remove());
-  flowerCount = 0;
-  document.getElementById('flowerCount').textContent = 0;
-  document.getElementById('gardenHint').style.display = 'block';
+function getNewPrompt() {
+  const prompts = writingPrompts[selectedCategory] || writingPrompts.romance;
+  const idx = Math.floor(Math.random() * prompts.length);
+  const el = document.getElementById('writingPromptText');
+  if (el) {
+    el.style.opacity = '0';
+    setTimeout(() => { el.textContent = prompts[idx]; el.style.opacity = '1'; }, 200);
+  }
 }
 
-/* ══════════════════════════════════════
-   BREATHING EXERCISE
-══════════════════════════════════════ */
-let breathRunning = false;
-let breathSessions = 0;
+function updateWritingStats(text) {
+  const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  const chars = text.length;
+  const wordEl = document.getElementById('wordCount');
+  const charEl = document.getElementById('charCount');
+  if (wordEl) wordEl.textContent = words + ' kata';
+  if (charEl) charEl.textContent = chars + ' karakter';
 
-function startBreathing() {
-  if (breathRunning) return;
-  breathRunning = true;
-  breathSessions = 0;
-  document.getElementById('breathCount').textContent = 0;
-  document.getElementById('breathBtn').disabled = true;
-  runBreathCycle();
+  // Update challenges
+  const s50 = document.getElementById('status-50');
+  const s100 = document.getElementById('status-100');
+  const ch50 = document.getElementById('ch-50words');
+  const ch100 = document.getElementById('ch-100words');
+  if (s50) s50.textContent = Math.min(words, 50) + '/50';
+  if (s100) s100.textContent = Math.min(words, 100) + '/100';
+  if (ch50) ch50.classList.toggle('challenge-done', words >= 50);
+  if (ch100) ch100.classList.toggle('challenge-done', words >= 100);
 }
 
-function runBreathCycle() {
-  if (breathSessions >= 4) {
-    const circle = document.getElementById('breathCircle');
-    const label = document.getElementById('breathLabel');
-    circle.className = 'breath-circle';
-    circle.textContent = '🌸';
-    label.textContent = '✅ Selesai! Kamu luar biasa, Ecaaak 🌸';
-    document.getElementById('breathBtn').disabled = false;
-    breathRunning = false;
+function startWritingTimer() {
+  if (writingTimerInterval) return;
+  writingTimerInterval = setInterval(() => {
+    writingSeconds++;
+    updateTimerDisplay();
+    const mins5 = document.getElementById('status-5min');
+    const ch5 = document.getElementById('ch-5min');
+    if (mins5) mins5.textContent = Math.floor(writingSeconds/60) + ':' + String(writingSeconds%60).padStart(2,'0');
+    if (ch5) ch5.classList.toggle('challenge-done', writingSeconds >= 300);
+  }, 1000);
+}
+
+function stopWritingTimer() {
+  if (writingTimerInterval) { clearInterval(writingTimerInterval); writingTimerInterval = null; }
+}
+
+function updateTimerDisplay() {
+  const el = document.getElementById('writingTimer');
+  if (el) el.textContent = '⏱️ ' + Math.floor(writingSeconds/60) + ':' + String(writingSeconds%60).padStart(2,'0');
+}
+
+function evaluateWriting() {
+  const textarea = document.getElementById('writingArea');
+  const res = document.getElementById('writingResult');
+  if (!textarea || !res) return;
+  const text = textarea.value.trim();
+  const words = text ? text.split(/\s+/).length : 0;
+  res.style.display = 'block';
+  if (words === 0) {
+    res.innerHTML = '💭 <span>Yuk mulai nulis dulu! Satu kata pun sudah luar biasa 🌸</span>';
     return;
   }
-  const circle = document.getElementById('breathCircle');
-  const label = document.getElementById('breathLabel');
-
-  // Inhale 4s
-  circle.className = 'breath-circle expand';
-  circle.textContent = 'Hirup...';
-  label.textContent = '🌬️ Hirup... (4 detik)';
-  setTimeout(() => {
-    // Hold 7s
-    circle.className = 'breath-circle hold';
-    circle.textContent = 'Tahan...';
-    label.textContent = '😶 Tahan... (7 detik)';
-    setTimeout(() => {
-      // Exhale 8s
-      circle.className = 'breath-circle shrink';
-      circle.textContent = 'Hembuskan...';
-      label.textContent = '💨 Hembuskan... (8 detik)';
-      setTimeout(() => {
-        breathSessions++;
-        document.getElementById('breathCount').textContent = breathSessions;
-        circle.className = 'breath-circle';
-        circle.textContent = '✨';
-        runBreathCycle();
-      }, 8000);
-    }, 7000);
-  }, 4000);
+  const msgs = [
+    { min: 200, icon: '🏆', msg: `LUAR BIASA! ${words} kata! Kamu penulis sejati, Ecaaak! Bakatmu sungguh memukau 💕✨` },
+    { min: 100, icon: '🌟', msg: `WOW! ${words} kata! Kamu sungguh ekspresif dan berbakat — ceritamu pasti indah! 🌸` },
+    { min: 50, icon: '🎉', msg: `Hebat! ${words} kata sudah kamu tulis! Terus semangat — kamu sedang mekar! 📖💪` },
+    { min: 20, icon: '💕', msg: `Bagus sekali! ${words} kata untuk memulai. Setiap penulis besar pun dimulai dari sini! ✍️` },
+    { min: 1, icon: '🌱', msg: `Kamu sudah mulai! ${words} kata adalah langkah pertama yang luar biasa. Lanjutkan! 🌸` },
+  ];
+  const result = msgs.find(m => words >= m.min) || msgs[msgs.length-1];
+  res.innerHTML = `<div style="font-size:2rem;">${result.icon}</div><div style="font-weight:800;color:var(--pink-600);margin:.4rem 0;">${result.msg}</div>`;
 }
 
 function initProgress() {
@@ -1200,7 +1521,7 @@ function initProgress() {
 }
 
 /* ══════════════════════════════════════
-   CATCH GAME
+   CATCH GAME (DAY 6)
 ══════════════════════════════════════ */
 let catchScore = 0, catchTimerVal = 30, catchInterval = null, catchSpawnInterval = null, catchRunning = false;
 

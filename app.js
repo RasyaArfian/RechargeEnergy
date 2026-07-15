@@ -75,10 +75,10 @@ const DAYS = [
     date: '2026-07-17',
     label: 'Hari ke-5',
     dayName: 'Jumat, 17 Juli',
-    emoji: '💨',
-    title: 'Napas & Tenangkan Hati',
-    desc: 'Hampir selesai! Latihan pernapasan untuk recharge energimu.',
-    tag: 'Relaksasi',
+    emoji: '✍️',
+    title: 'Game Menulis Kreatif!',
+    desc: 'Hampir selesai! Ungkapkan isi hatimu lewat game menulis yang seru!',
+    tag: 'Writing Game',
     tagClass: 'matcha',
     content: 'day5',
   },
@@ -273,119 +273,208 @@ const contentRenderers = {
     `;
   },
 
-  /* ===== DAY 4: Flower Garden ===== */
+  /* ===== DAY 4: Pro Painting Studio ===== */
   day4() {
     return `
       <div class="modal-day-header">
-        <div class="modal-day-emoji">🌸</div>
+        <div class="modal-day-emoji">🎨</div>
         <div class="modal-day-label">Hari ke-4 • Kamis 16 Juli</div>
-        <div class="modal-day-title">Tamanmu, Tamanku! 🌷</div>
+        <div class="modal-day-title">Studio Lukis Profesionalmu! 🖌️</div>
       </div>
 
       <div class="quote-card">
-        "Seperti bunga lily yang tumbuh indah meski di lumpur — kamu mekar paling cantik di tengah kesulitan."
+        "Seni adalah jiwa yang berbicara tanpa kata — dan lukisanmu,  Ecaaak, selalu bicara tentang keindahan."
         <div class="quote-author">— Selalu kagum melihatmu,  Ecaaak 🌸</div>
       </div>
 
       <div class="love-letter">
          Ecaaak,<br/><br/>
         Hari keempat! Kamu <strong>luar biasa sekali</strong> 🎉 Empat hari dengan rapat panjang, tapi kamu masih berdiri tegak. Aku bangga banget sama kamu 💕<br/><br/>
-        Untuk hari ini, aku buatkan taman bunga virtual khusus buat kamu. Setiap kali kamu klik taman, bunga pink lily akan tumbuh! Bayangkan ini sebagai semua doa dan semangat yang aku kirimkan untukmu 🌸🌷
+        Karena kamu suka melukis, hari ini aku buatkan <strong>studio lukis digital lengkap</strong> khusus buat kamu! Ada brush profesional, pensil, spray, fill tool, shapes, dan masih banyak lagi. Ekspresikan dirimu bebas! 🎨🖌️
       </div>
 
-      <div class="game-title">🌸 Taman Lily Virtual  Ecaaak</div>
-      <div class="garden-wrap" id="gardenWrap">
-        <div class="garden-hint" id="gardenHint">✨ Klik di mana saja untuk menumbuhkan bunga! ✨</div>
-      </div>
-      <div style="text-align:center;margin-bottom:1.5rem;">
-        <span style="font-size:.88rem;color:var(--text-mid);">Bunga tumbuh: <strong id="flowerCount">0</strong> 🌸</span>
-        <button class="draw-btn" id="resetGarden" style="margin-left:1rem;">🔄 Reset Taman</button>
+      <div class="pro-studio-wrap" id="proStudioWrap">
+        <!-- Toolbar -->
+        <div class="studio-toolbar" id="studioToolbar">
+          <div class="toolbar-group">
+            <div class="tool-label">🖌️ Tool</div>
+            <div class="studio-tools">
+              <button class="tool-btn active" id="tool-pen" data-tool="pen" title="Pen">✏️</button>
+              <button class="tool-btn" id="tool-brush" data-tool="brush" title="Brush Lembut">🖌️</button>
+              <button class="tool-btn" id="tool-spray" data-tool="spray" title="Spray">🎨</button>
+              <button class="tool-btn" id="tool-eraser" data-tool="eraser" title="Eraser">🗑️</button>
+              <button class="tool-btn" id="tool-line" data-tool="line" title="Garis Lurus">📏</button>
+              <button class="tool-btn" id="tool-rect" data-tool="rect" title="Persegi">⬜</button>
+              <button class="tool-btn" id="tool-circle" data-tool="circle" title="Lingkaran">⭕</button>
+              <button class="tool-btn" id="tool-fill" data-tool="fill" title="Fill Warna">🪣</button>
+            </div>
+          </div>
+          <div class="toolbar-group">
+            <div class="tool-label">🎨 Warna</div>
+            <div class="studio-colors" id="studioColors">
+              <div class="color-swatch active" style="background:#ff80b5" data-color="#ff80b5"></div>
+              <div class="color-swatch" style="background:#e83e8c" data-color="#e83e8c"></div>
+              <div class="color-swatch" style="background:#c2185b" data-color="#c2185b"></div>
+              <div class="color-swatch" style="background:#ff5722" data-color="#ff5722"></div>
+              <div class="color-swatch" style="background:#ffd54f" data-color="#ffd54f"></div>
+              <div class="color-swatch" style="background:#6b8f71" data-color="#6b8f71"></div>
+              <div class="color-swatch" style="background:#42a5f5" data-color="#42a5f5"></div>
+              <div class="color-swatch" style="background:#9c27b0" data-color="#9c27b0"></div>
+              <div class="color-swatch" style="background:#333333" data-color="#333333"></div>
+              <div class="color-swatch" style="background:#ffffff;border:2px solid #ccc" data-color="#ffffff"></div>
+              <input type="color" class="color-picker-input" id="customColorPicker" value="#ff80b5" title="Pilih warna custom"/>
+            </div>
+          </div>
+          <div class="toolbar-group">
+            <div class="tool-label">📏 Ukuran</div>
+            <input type="range" class="size-slider" id="studioSize" min="1" max="60" value="8" />
+            <span class="size-display" id="sizeDisplay">8px</span>
+          </div>
+          <div class="toolbar-group">
+            <div class="tool-label">💧 Opacity</div>
+            <input type="range" class="size-slider" id="studioOpacity" min="10" max="100" value="100" />
+            <span class="size-display" id="opacityDisplay">100%</span>
+          </div>
+        </div>
+
+        <!-- Canvas Area -->
+        <div class="studio-canvas-wrap">
+          <canvas id="drawCanvas" width="600" height="360"></canvas>
+          <canvas id="previewCanvas" width="600" height="360"></canvas>
+        </div>
+
+        <!-- Bottom Actions -->
+        <div class="studio-actions">
+          <button class="draw-btn" id="undoBtn">↩️ Undo</button>
+          <button class="draw-btn" id="clearCanvas">🗑️ Hapus Semua</button>
+          <button class="draw-btn" id="fillBg">🌈 Warna Latar</button>
+          <button class="draw-btn studio-save" id="saveCanvas">💾 Simpan Lukisan</button>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="studio-status" id="studioStatus">✏️ Pen — Klik dan seret untuk melukis!</div>
       </div>
 
-      <div class="tip-box" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0)">
+      <div class="tip-box" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);margin-top:1rem;">
+        <h4>🎨 Tips Pro untuk  Ecaaak</h4>
+        <p>✨ <strong>Pen</strong>: garis tegas presisi | 🖌️ <strong>Brush</strong>: sapuan lembut | 🎨 <strong>Spray</strong>: efek kabut artistik | 🪣 <strong>Fill</strong>: isi area warna | ⬜⭕ <strong>Shape</strong>: bentuk geometris | 📏 <strong>Line</strong>: garis lurus sempurna</p>
+      </div>
+
+      <div class="tip-box" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
         <h4>🌷 Fakta Bunga Lily Pink</h4>
         <p>Bunga lily pink melambangkan <strong>kasih sayang, kecantikan, dan keberuntungan</strong>. Di banyak budaya, lily adalah simbol wanita yang kuat dan anggun — persis seperti kamu,  Ecaaak! 🌸</p>
       </div>
 
-      <div class="game-title" style="margin-top:1rem;">✏️ Tantangan Menggambar Mini</div>
-      <canvas id="drawCanvas" width="600" height="200"></canvas>
-      <div class="draw-controls" id="drawControls">
-        <div class="color-btn active" style="background:#ff80b5" data-color="#ff80b5"></div>
-        <div class="color-btn" style="background:#e83e8c" data-color="#e83e8c"></div>
-        <div class="color-btn" style="background:#6b8f71" data-color="#6b8f71"></div>
-        <div class="color-btn" style="background:#ffd54f" data-color="#ffd54f"></div>
-        <div class="color-btn" style="background:#ffffff;border:2px solid #eee" data-color="#ffffff"></div>
-        <input type="range" class="size-slider" id="brushSize" min="2" max="30" value="6" />
-        <button class="draw-btn" id="clearCanvas">🗑️ Hapus</button>
-      </div>
-      <p style="font-size:.8rem;color:var(--text-light);margin-top:.5rem;">Tantangan: gambar bunga lily pinkmu sendiri! 🌸</p>
-
       <ul class="checklist" style="margin-top:1.5rem;" id="checklist-day4">
-        <li data-key="d4c1"><div class="check-box"></div><span>Perhatikan hal indah kecil hari ini 🌺</span></li>
+        <li data-key="d4c1"><div class="check-box"></div><span>Lukis sesuatu yang kamu suka hari ini 🎨</span></li>
         <li data-key="d4c2"><div class="check-box"></div><span>Tersenyum pada diri sendiri di cermin 😊</span></li>
-        <li data-key="d4c3"><div class="check-box"></div><span>Ingat: 2 hari lagi dan semuanya selesai! 💪</span></li>
+        <li data-key="d4c3"><div class="check-box"></div><span>Simpan lukisanmu sebagai kenangan! 💾</span></li>
+        <li data-key="d4c4"><div class="check-box"></div><span>Ingat: 2 hari lagi dan semuanya selesai! 💪</span></li>
       </ul>
     `;
   },
 
-  /* ===== DAY 5: Breathing Exercise ===== */
+  /* ===== DAY 5: Creative Writing Game ===== */
   day5() {
     return `
       <div class="modal-day-header">
-        <div class="modal-day-emoji">💨</div>
+        <div class="modal-day-emoji">✍️</div>
         <div class="modal-day-label">Hari ke-5 • Jumat 17 Juli</div>
         <div class="modal-day-title">Hampir Sampai,  Ecaaak! 🌟</div>
       </div>
 
       <div class="quote-card">
-        "Puncak gunung tidak akan kabur — ia menunggumu dengan sabar. Teruslah melangkah."
-        <div class="quote-author">— Untuk  Ecaaak di hari kelima 🏔️💕</div>
+        "Kata-kata adalah jembatan antara hati dan dunia — dan ceritamu,  Ecaaak, selalu membuatku terpukau."
+        <div class="quote-author">— Untuk  Ecaaak di hari kelima ✍️💕</div>
       </div>
 
       <div class="love-letter">
          Ecaaak,<br/><br/>
         <strong>HARI KELIMA!</strong> 🎊 Kamu hampir sampai di garis akhir! Tinggal satu hari lagi setelah ini — kamu sudah melewati yang terberatnya dengan sangat indah 🌸<br/><br/>
-        Hari ini aku ingin mengajakmu untuk <strong>bernapas bersama</strong>. Ikuti latihan pernapasan ini sebelum atau setelah rapat — terbukti secara ilmiah bisa menurunkan stres dan merefresh energimu dalam 2 menit saja! 🍃
+        Kamu suka membaca, tapi hari ini aku ingin kamu jadi <strong>penulisnya</strong>! Main game menulis kreatif ini — pilih kategori cerita, dapatkan prompt seru, lalu tulis cerita pendekmu. Ekspresikan hatimu dengan kata-kata! ✍️📖
       </div>
 
-      <div class="breath-container">
-        <div class="breath-circle" id="breathCircle">Mulai</div>
-        <div class="breath-label" id="breathLabel">Tekan lingkaran untuk memulai latihan napas 🌬️</div>
-        <button class="breath-btn" id="breathBtn">🌬️ Mulai Latihan Napas</button>
-        <div style="font-size:.8rem;color:var(--text-light);text-align:center;">
-          Sesi: <strong id="breathCount">0</strong>/4 napas
+      <div class="writing-game-wrap" id="writingGameWrap">
+        <!-- Category Selection -->
+        <div class="writing-categories" id="writingCategories">
+          <div class="game-title">📖 Pilih Kategori Ceritamu</div>
+          <div class="category-grid">
+            <button class="category-btn active" data-cat="romance">💕 Romansa</button>
+            <button class="category-btn" data-cat="adventure">🌟 Petualangan</button>
+            <button class="category-btn" data-cat="daily">☕ Keseharian</button>
+            <button class="category-btn" data-cat="fantasy">🧚 Fantasi</button>
+            <button class="category-btn" data-cat="friendship">🌸 Persahabatan</button>
+            <button class="category-btn" data-cat="motivation">💪 Motivasi</button>
+          </div>
+        </div>
+
+        <!-- Writing Prompt -->
+        <div class="writing-prompt-box" id="writingPromptBox">
+          <div class="prompt-label">✨ Prompt Ceritamu:</div>
+          <div class="prompt-text" id="writingPromptText">Klik "Dapat Prompt" untuk mendapatkan inspirasi menulis!</div>
+          <button class="draw-btn" id="getPromptBtn" style="margin-top:.8rem;">🎲 Dapat Prompt Baru</button>
+        </div>
+
+        <!-- Writing Area -->
+        <div style="margin-top:1rem;">
+          <div class="writing-header">
+            <div class="game-title" style="margin-bottom:.3rem;">✍️ Tulis Ceritamu di Sini</div>
+            <div class="writing-stats">
+              <span id="wordCount">0 kata</span>
+              <span id="charCount">0 karakter</span>
+              <span id="writingTimer">⏱️ 0:00</span>
+            </div>
+          </div>
+          <textarea class="writing-textarea" id="writingArea" placeholder="Mulai ceritamu di sini... tulis apa saja yang ada di hatimu 💕&#10;&#10;Nggak ada yang menghakimi — ini ruang ekspresimu sendiri! 🌸"></textarea>
+        </div>
+
+        <!-- Writing Tools -->
+        <div class="writing-tools">
+          <button class="draw-btn" id="clearWritingBtn">🗑️ Hapus</button>
+          <button class="draw-btn" id="saveWritingBtn">💾 Simpan Cerita</button>
+          <button class="writing-submit-btn" id="submitWritingBtn">✨ Selesai & Nilai!</button>
+        </div>
+
+        <!-- Writing Result -->
+        <div class="writing-result" id="writingResult" style="display:none;"></div>
+
+        <!-- Writing Challenges -->
+        <div class="writing-challenges" id="writingChallenges">
+          <div class="game-title">🏆 Tantangan Menulis</div>
+          <div class="challenge-list">
+            <div class="challenge-item" id="ch-50words">
+              <span class="challenge-icon">📝</span>
+              <span class="challenge-text">Tulis minimal 50 kata</span>
+              <span class="challenge-status" id="status-50">0/50</span>
+            </div>
+            <div class="challenge-item" id="ch-100words">
+              <span class="challenge-icon">✍️</span>
+              <span class="challenge-text">Tulis minimal 100 kata</span>
+              <span class="challenge-status" id="status-100">0/100</span>
+            </div>
+            <div class="challenge-item" id="ch-5min">
+              <span class="challenge-icon">⏱️</span>
+              <span class="challenge-text">Tulis selama 5 menit</span>
+              <span class="challenge-status" id="status-5min">0:00</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="tip-box">
-        <h4>🧘 Teknik 4-7-8 untuk  Ecaaak</h4>
-        <p>Hirup 4 detik → Tahan 7 detik → Hembuskan 8 detik. Ulangi 4x. Teknik ini menenangkan sistem saraf dan membuatmu lebih fokus untuk rapat malam ini! 💆</p>
+      <div class="tip-box" style="margin-top:1rem;">
+        <h4>✍️ Tips Menulis untuk  Ecaaak</h4>
+        <p>Jangan khawatir soal tata bahasa atau ejaan — tulis saja apa yang ada di hati. Menulis bebas selama 5-10 menit bisa membantu meredakan stres dan merefresh pikiran. Kamu sudah baca banyak buku, sekarang giliran kamu jadi penulisnya! 📚💕</p>
       </div>
 
-      <div class="game-title">💆 Progress Mingguanmu</div>
+      <div class="game-title" style="margin-top:1rem;">💆 Progress Mingguanmu</div>
       <div style="margin-bottom:.5rem;font-size:.85rem;color:var(--text-mid);">Kamu sudah melewati...</div>
       <div class="progress-bar-wrap">
         <div class="progress-bar-fill" id="weekProgress" style="width:0%"></div>
       </div>
       <div style="text-align:center;font-size:.88rem;color:var(--pink-500);font-weight:700;margin-bottom:1.5rem;" id="progressLabel">Menghitung...</div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
-        ${[
-          { emoji: '⏰', label: '5 Hari', sub: 'sudah kamu lalui' },
-          { emoji: '📝', label: '5+ Rapat', sub: 'kamu hadiri dengan gagah' },
-          { emoji: '💪', label: '100%', sub: 'usaha yang kamu berikan' },
-          { emoji: '🌸', label: '∞ Kasih Sayang', sub: 'yang aku kirimkan untukmu' },
-        ].map(s => `
-          <div style="background:var(--pink-50);border-radius:var(--radius);padding:1rem;text-align:center;border:1.5px solid var(--pink-100);">
-            <div style="font-size:1.8rem;">${s.emoji}</div>
-            <div style="font-weight:800;color:var(--text-dark);font-size:1rem;">${s.label}</div>
-            <div style="font-size:.75rem;color:var(--text-mid);">${s.sub}</div>
-          </div>
-        `).join('')}
-      </div>
-
       <ul class="checklist" id="checklist-day5">
-        <li data-key="d5c1"><div class="check-box"></div><span>Lakukan latihan napas 4x hari ini 🌬️</span></li>
+        <li data-key="d5c1"><div class="check-box"></div><span>Tulis cerita pendek hari ini ✍️</span></li>
         <li data-key="d5c2"><div class="check-box"></div><span>Makan sesuatu yang enak sebagai reward 🍜</span></li>
         <li data-key="d5c3"><div class="check-box"></div><span>Ingat: besok adalah hari terakhir! 🎉</span></li>
       </ul>
@@ -417,9 +506,9 @@ const contentRenderers = {
 
       <div class="love-letter">
         Ecaaak,<br/><br/>
-        <strong>HARI INI ADALAH HARI TERAKHIR!</strong> 🎉🎊 Kamu udaa melewati 6 hari yang luar biasa — setiap malam rapat, setelah seharian kampus, dan kamu TETAP berdiri dengan kepala tegak dan senyum ceriamu terus dibarengi dengan ceritamu yang khas.<br/><br/>
+        <strong>HARI INI ADALAH HARI TERAKHIR!</strong> 🎉🎊 Kamu sudah melewati 6 hari yang luar biasa — setiap malam rapat, setelah seharian kampus, dan kamu TETAP berdiri dengan kepala tegak dan senyum ceriamu yang khas.<br/><br/>
         Kamu adalah wanita yang paling kuat yang aku kenal. Keceriaanmu adalah kekuatanmu, dan hobimu menggambar dan membaca adalah jiwa yang membuatmu begitu indah.<br/><br/>
-        Sekarang, sebagai hadiah terakhir — <strong>tangkap seblak dan gacoan</strong> sebagai perayaanmu! Kamu pantas mendapatkan semuanya! 🍜🔥
+        Sekarang, sebagai hadiah terakhir — <strong>tangkap makanan favoritmu</strong> dan ada <strong>hadiah spesial Dubai Chewy Cookie</strong> yang menunggumu! 🍜🔥🍪✨
       </div>
 
       <div class="game-title">🎮 Tangkap Makanan Favoritmu!</div>
@@ -436,9 +525,86 @@ const contentRenderers = {
         <p>Kamu berhak makan <strong>seblak</strong> atau <strong>gacoan</strong> favorit sebagai perayaan! Kamu sudah bekerja keras — sekarang saatnya menikmati 🍜🔥 Minta temenin ya!</p>
       </div>
 
-      <div class="game-title">💌 Pesan Terakhir Untukmu</div>
+      <!-- Dubai Chewy Cookie Section -->
+      <div class="dubai-cookie-section">
+        <div class="dubai-cookie-header">
+          <div class="dubai-cookie-badge">🏆 HADIAH SPESIAL</div>
+          <div class="dubai-cookie-title">🍪 Dubai Chewy Cookie</div>
+          <div class="dubai-cookie-subtitle">Untuk  Ecaaak yang luar biasa! ✨</div>
+        </div>
+
+        <div class="dubai-cookie-info">
+          <div class="cookie-info-card">
+            <div class="cookie-info-icon">🍪</div>
+            <h4>Apa itu Dubai Chewy Cookie?</h4>
+            <p>Dubai Chewy Cookie adalah camilan viral kekinian yang terinspirasi dari dessert Timur Tengah! Teksturnya super <strong>kenyal dan chewy</strong> dari lapisan marshmallow, dengan isian <strong>pasta pistachio + kataifi</strong> (mi tipis renyah khas kunafe) yang gurih dan mewah. Rasanya perpaduan manis-gurih yang bikin nagih! 😍</p>
+          </div>
+
+          <div class="cookie-details-grid">
+            <div class="cookie-detail-item">
+              <span class="detail-icon">🌟</span>
+              <div>
+                <div class="detail-title">Tekstur Unik</div>
+                <div class="detail-desc">Lapisan luar kenyal dari marshmallow yang meleleh di mulut</div>
+              </div>
+            </div>
+            <div class="cookie-detail-item">
+              <span class="detail-icon">🥜</span>
+              <div>
+                <div class="detail-title">Isian Pistachio</div>
+                <div class="detail-desc">Pasta pistachio premium yang kaya rasa dan creamy</div>
+              </div>
+            </div>
+            <div class="cookie-detail-item">
+              <span class="detail-icon">✨</span>
+              <div>
+                <div class="detail-title">Kataifi Renyah</div>
+                <div class="detail-desc">Mi tipis ala kunafe yang digoreng garing sebagai isian</div>
+              </div>
+            </div>
+            <div class="cookie-detail-item">
+              <span class="detail-icon">🌍</span>
+              <div>
+                <div class="detail-title">Viral Internasional</div>
+                <div class="detail-desc">Terinspirasi dari dessert mewah Dubai yang sedang trending!</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cookie-recipe">
+            <div class="recipe-title">📋 Bahan-bahan Dubai Chewy Cookie</div>
+            <div class="recipe-grid">
+              <div class="recipe-section">
+                <div class="recipe-subtitle">🍫 Lapisan Luar</div>
+                <ul class="recipe-list">
+                  <li>250 gr Marshmallow</li>
+                  <li>50 gr Mentega</li>
+                  <li>30 gr Cokelat bubuk</li>
+                  <li>10 gr Susu bubuk</li>
+                </ul>
+              </div>
+              <div class="recipe-section">
+                <div class="recipe-subtitle">🥜 Isian Lezat</div>
+                <ul class="recipe-list">
+                  <li>150 gr Kataifi / Kunafe</li>
+                  <li>250 gr Pistachio spread</li>
+                  <li>Kacang pistachio cincang</li>
+                  <li>Sedikit mentega untuk sangrai</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="cookie-message">
+            <div style="font-size:2rem;">🍪💕</div>
+            <p><strong>Hadiah untukmu,  Ecaaak!</strong> Setelah semua kerja keras ini, kamu SANGAT pantas mencoba Dubai Chewy Cookie yang mewah dan viral ini. Ini bukan sekadar camilan — ini adalah perayaan atas semua perjuanganmu selama 6 hari! 🏆✨</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="game-title" style="margin-top:1.5rem;">💌 Pesan Terakhir Untukmu</div>
       <div style="background:linear-gradient(135deg,var(--pink-50),#fce4ec);border-radius:var(--radius);padding:1.5rem;border:1.5px solid var(--pink-200);margin-bottom:1.5rem;text-align:center;">
-        <div style="font-size:2.5rem;margin-bottom:.8rem;">🌸🍵🎨📚🌸</div>
+        <div style="font-size:2.5rem;margin-bottom:.8rem;">🌸🍵🎨📚🍪</div>
         <p style="font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--text-dark);line-height:1.8;">
           Terima kasih sudah menjadi dirimu sendiri —<br/>
           si ceria yang suka lily pink, matcha, menggambar, dan membaca.<br/>
@@ -449,8 +615,8 @@ const contentRenderers = {
 
       <ul class="checklist" id="checklist-day6">
         <li data-key="d6c1"><div class="check-box"></div><span>Makan seblak atau gacoan sebagai reward! 🍜</span></li>
-        <li data-key="d6c2"><div class="check-box"></div><span>Istirahat yang cukup malam ini 😴</span></li>
-        <li data-key="d6c3"><div class="check-box"></div><span>Gambar sesuatu sebagai kenangan minggu ini 🎨</span></li>
+        <li data-key="d6c2"><div class="check-box"></div><span>Coba buat atau beli Dubai Chewy Cookie 🍪</span></li>
+        <li data-key="d6c3"><div class="check-box"></div><span>Istirahat yang cukup malam ini 😴</span></li>
         <li data-key="d6c4"><div class="check-box"></div><span>Ingat kamu luar biasa dan dicintai sepenuhnya 💕</span></li>
       </ul>
     `;
@@ -538,13 +704,20 @@ function startCatchGame() {
   }, 1000);
 }
 
-/* ---------- DRAWING CANVAS ---------- */
+/* ---------- PRO PAINTING STUDIO (DAY 4) ---------- */
 function initDrawingCanvas() {
   const canvas = document.getElementById('drawCanvas');
+  const previewCanvas = document.getElementById('previewCanvas');
+
+  // If pro studio mode (day4 has previewCanvas)
+  if (canvas && previewCanvas) {
+    initProStudio(canvas, previewCanvas);
+    return;
+  }
+
+  // Basic canvas (day1)
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-
-  // Resize canvas to match display size
   const resize = () => {
     const rect = canvas.getBoundingClientRect();
     const ratio = window.devicePixelRatio || 1;
@@ -555,78 +728,448 @@ function initDrawingCanvas() {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   };
   resize();
-
   let painting = false;
   let currentColor = '#ff80b5';
   let brushSize = 6;
-
   const getPos = (e) => {
     const rect = canvas.getBoundingClientRect();
-    if (e.touches) {
-      return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
-    }
+    if (e.touches) return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
     return { x: e.clientX - rect.left, y: e.clientY - rect.top };
   };
-
   canvas.addEventListener('mousedown', (e) => { painting = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
   canvas.addEventListener('mousemove', (e) => {
     if (!painting) return;
     const p = getPos(e);
-    ctx.lineTo(p.x, p.y);
-    ctx.strokeStyle = currentColor;
-    ctx.lineWidth = brushSize;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.stroke();
+    ctx.lineTo(p.x, p.y); ctx.strokeStyle = currentColor; ctx.lineWidth = brushSize;
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.stroke();
   });
   canvas.addEventListener('mouseup', () => { painting = false; ctx.beginPath(); });
   canvas.addEventListener('mouseleave', () => { painting = false; });
   canvas.addEventListener('touchstart', (e) => { e.preventDefault(); painting = true; const p = getPos(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); }, { passive: false });
   canvas.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-    if (!painting) return;
+    e.preventDefault(); if (!painting) return;
     const p = getPos(e);
-    ctx.lineTo(p.x, p.y);
-    ctx.strokeStyle = currentColor;
-    ctx.lineWidth = brushSize;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-    ctx.stroke();
+    ctx.lineTo(p.x, p.y); ctx.strokeStyle = currentColor; ctx.lineWidth = brushSize;
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.stroke();
   }, { passive: false });
   canvas.addEventListener('touchend', () => { painting = false; });
-
-  // Color buttons — scope to canvas container to avoid conflict with Day 4
   const controls = document.getElementById('drawControls');
   if (controls) {
     controls.querySelectorAll('.color-btn').forEach(btn => {
-      btn.onclick = () => {
-        controls.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentColor = btn.dataset.color;
+      btn.onclick = () => { controls.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentColor = btn.dataset.color; };
+    });
+  }
+  const sizeSlider = document.getElementById('brushSize');
+  if (sizeSlider) sizeSlider.oninput = e => brushSize = parseInt(e.target.value);
+  const clearBtn = document.getElementById('clearCanvas');
+  if (clearBtn) clearBtn.onclick = () => { const rect = canvas.getBoundingClientRect(); ctx.fillStyle = '#fff8fc'; ctx.fillRect(0, 0, rect.width, rect.height); };
+  const saveBtn = document.getElementById('saveCanvas');
+  if (saveBtn) saveBtn.onclick = () => { const a = document.createElement('a'); a.download = 'lukisan-Ecaaak.png'; a.href = canvas.toDataURL(); a.click(); };
+}
+
+function initProStudio(canvas, previewCanvas) {
+  const ctx = canvas.getContext('2d');
+  const pCtx = previewCanvas.getContext('2d');
+  const statusEl = document.getElementById('studioStatus');
+
+  const setupCanvas = (c, cx) => {
+    const rect = c.getBoundingClientRect();
+    const r = window.devicePixelRatio || 1;
+    c.width = rect.width * r;
+    c.height = rect.height * r;
+    cx.scale(r, r);
+  };
+  setupCanvas(canvas, ctx);
+  setupCanvas(previewCanvas, pCtx);
+  ctx.fillStyle = '#fff8fc';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  let tool = 'pen';
+  let color = '#ff80b5';
+  let size = 8;
+  let opacity = 1;
+  let painting = false;
+  let startX = 0, startY = 0;
+  let undoStack = [];
+  let sprayInterval = null;
+
+  const getPos = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    if (e.touches) return { x: e.touches[0].clientX - rect.left, y: e.touches[0].clientY - rect.top };
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  };
+
+  const saveUndo = () => {
+    if (undoStack.length > 20) undoStack.shift();
+    undoStack.push(ctx.getImageData(0, 0, canvas.width, canvas.height));
+  };
+
+  const setStatus = (msg) => { if (statusEl) statusEl.textContent = msg; };
+
+  // Tool buttons
+  document.querySelectorAll('.tool-btn').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      tool = btn.dataset.tool;
+      const labels = { pen: '✏️ Pen — klik dan seret untuk menggambar', brush: '🖌️ Brush Lembut — sapuan lembut', spray: '🎨 Spray — tahan untuk efek kabut', eraser: '🗑️ Eraser — hapus area', line: '📏 Garis — klik lalu seret untuk garis lurus', rect: '⬜ Persegi — seret untuk menggambar kotak', circle: '⭕ Lingkaran — seret untuk menggambar lingkaran', fill: '🪣 Fill — klik area untuk mengisi warna' };
+      setStatus(labels[tool] || '');
+    };
+  });
+
+  // Color swatches
+  const colorContainer = document.getElementById('studioColors');
+  if (colorContainer) {
+    colorContainer.querySelectorAll('.color-swatch').forEach(sw => {
+      sw.onclick = () => {
+        colorContainer.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+        sw.classList.add('active');
+        color = sw.dataset.color;
+        const cp = document.getElementById('customColorPicker');
+        if (cp) cp.value = color;
       };
+    });
+    const cp = document.getElementById('customColorPicker');
+    if (cp) cp.oninput = (e) => { color = e.target.value; colorContainer.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active')); };
+  }
+
+  // Size slider
+  const sizeSlider = document.getElementById('studioSize');
+  const sizeDisp = document.getElementById('sizeDisplay');
+  if (sizeSlider) sizeSlider.oninput = (e) => { size = +e.target.value; if (sizeDisp) sizeDisp.textContent = size + 'px'; };
+
+  // Opacity slider
+  const opSlider = document.getElementById('studioOpacity');
+  const opDisp = document.getElementById('opacityDisplay');
+  if (opSlider) opSlider.oninput = (e) => { opacity = +e.target.value / 100; if (opDisp) opDisp.textContent = e.target.value + '%'; };
+
+  // Draw helpers
+  const hexToRgba = (hex, a) => {
+    const r = parseInt(hex.slice(1,3),16), g = parseInt(hex.slice(3,5),16), b = parseInt(hex.slice(5,7),16);
+    return `rgba(${r},${g},${b},${a})`;
+  };
+
+  const drawSpray = (x, y) => {
+    const density = Math.max(10, size * 3);
+    for (let i = 0; i < density; i++) {
+      const angle = Math.random() * 2 * Math.PI;
+      const rad = Math.random() * size * 1.5;
+      const sx = x + Math.cos(angle) * rad;
+      const sy = y + Math.sin(angle) * rad;
+      ctx.fillStyle = hexToRgba(color, opacity * 0.3);
+      ctx.fillRect(sx, sy, 1.5, 1.5);
+    }
+  };
+
+  const drawShape = (px, py, cx, cy) => {
+    pCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+    pCtx.strokeStyle = hexToRgba(color, opacity);
+    pCtx.lineWidth = size;
+    pCtx.lineCap = 'round';
+    pCtx.beginPath();
+    if (tool === 'line') {
+      pCtx.moveTo(px, py);
+      pCtx.lineTo(cx, cy);
+      pCtx.stroke();
+    } else if (tool === 'rect') {
+      pCtx.strokeRect(px, py, cx - px, cy - py);
+    } else if (tool === 'circle') {
+      const rx = Math.abs(cx - px) / 2, ry = Math.abs(cy - py) / 2;
+      const ex = px + (cx - px) / 2, ey = py + (cy - py) / 2;
+      pCtx.ellipse(ex, ey, rx, ry, 0, 0, Math.PI * 2);
+      pCtx.stroke();
+    }
+  };
+
+  const floodFill = (x, y, fillColor) => {
+    const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imgData.data;
+    const w = canvas.width, h = canvas.height;
+    const px = (Math.round(x * (window.devicePixelRatio || 1)));
+    const py = (Math.round(y * (window.devicePixelRatio || 1)));
+    const idx = (py * w + px) * 4;
+    const tR = data[idx], tG = data[idx+1], tB = data[idx+2], tA = data[idx+3];
+    const fR = parseInt(fillColor.slice(1,3),16), fG = parseInt(fillColor.slice(3,5),16), fB = parseInt(fillColor.slice(5,7),16);
+    if (tR === fR && tG === fG && tB === fB) return;
+    const stack = [[px, py]];
+    while (stack.length) {
+      const [cx2, cy2] = stack.pop();
+      if (cx2 < 0 || cx2 >= w || cy2 < 0 || cy2 >= h) continue;
+      const i = (cy2 * w + cx2) * 4;
+      if (Math.abs(data[i]-tR) > 30 || Math.abs(data[i+1]-tG) > 30 || Math.abs(data[i+2]-tB) > 30) continue;
+      data[i] = fR; data[i+1] = fG; data[i+2] = fB; data[i+3] = 255;
+      stack.push([cx2+1,cy2],[cx2-1,cy2],[cx2,cy2+1],[cx2,cy2-1]);
+    }
+    ctx.putImageData(imgData, 0, 0);
+  };
+
+  // Mouse events
+  const onDown = (e) => {
+    e.preventDefault();
+    const p = getPos(e);
+    painting = true;
+    startX = p.x; startY = p.y;
+    saveUndo();
+
+    if (tool === 'fill') {
+      floodFill(p.x, p.y, color);
+      painting = false;
+      return;
+    }
+    if (tool === 'spray') {
+      drawSpray(p.x, p.y);
+      sprayInterval = setInterval(() => { const p2 = { x: startX, y: startY }; drawSpray(p2.x, p2.y); }, 30);
+    } else if (tool !== 'line' && tool !== 'rect' && tool !== 'circle') {
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+    }
+  };
+
+  const onMove = (e) => {
+    e.preventDefault();
+    if (!painting) return;
+    const p = getPos(e);
+    startX = p.x; startY = p.y;
+
+    if (tool === 'pen') {
+      ctx.strokeStyle = hexToRgba(color, opacity);
+      ctx.lineWidth = size; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.lineTo(p.x, p.y); ctx.stroke();
+    } else if (tool === 'brush') {
+      ctx.strokeStyle = hexToRgba(color, opacity * 0.4);
+      ctx.lineWidth = size * 2.5; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.lineTo(p.x, p.y); ctx.stroke();
+    } else if (tool === 'eraser') {
+      ctx.clearRect(p.x - size/2, p.y - size/2, size, size);
+    } else if (tool === 'line' || tool === 'rect' || tool === 'circle') {
+      drawShape(startX, startY, p.x, p.y);
+    }
+  };
+
+  const onUp = (e) => {
+    if (!painting) return;
+    const p = getPos(e);
+    if (tool === 'line' || tool === 'rect' || tool === 'circle') {
+      ctx.drawImage(previewCanvas, 0, 0, canvas.width/2, canvas.height/2);
+      pCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+    }
+    if (sprayInterval) { clearInterval(sprayInterval); sprayInterval = null; }
+    painting = false;
+    ctx.beginPath();
+  };
+
+  canvas.addEventListener('mousedown', onDown);
+  canvas.addEventListener('mousemove', onMove);
+  canvas.addEventListener('mouseup', onUp);
+  canvas.addEventListener('mouseleave', onUp);
+  canvas.addEventListener('touchstart', onDown, { passive: false });
+  canvas.addEventListener('touchmove', onMove, { passive: false });
+  canvas.addEventListener('touchend', onUp);
+
+  // Action buttons
+  const undoBtn = document.getElementById('undoBtn');
+  if (undoBtn) undoBtn.onclick = () => { if (undoStack.length) { ctx.putImageData(undoStack.pop(), 0, 0); } };
+
+  const clearBtn = document.getElementById('clearCanvas');
+  if (clearBtn) clearBtn.onclick = () => { saveUndo(); ctx.fillStyle = '#fff8fc'; ctx.fillRect(0, 0, canvas.width/2, canvas.height/2); };
+
+  const fillBgBtn = document.getElementById('fillBg');
+  if (fillBgBtn) fillBgBtn.onclick = () => { saveUndo(); ctx.fillStyle = hexToRgba(color, opacity); ctx.fillRect(0, 0, canvas.width/2, canvas.height/2); };
+
+  const saveBtn = document.getElementById('saveCanvas');
+  if (saveBtn) saveBtn.onclick = () => {
+    const merged = document.createElement('canvas');
+    merged.width = canvas.width; merged.height = canvas.height;
+    const mCtx = merged.getContext('2d');
+    mCtx.drawImage(canvas, 0, 0);
+    const a = document.createElement('a');
+    a.download = 'studio-Ecaaak.png'; a.href = merged.toDataURL(); a.click();
+  };
+
+  setStatus('✏️ Pen — Klik dan seret untuk melukis!');
+}
+
+/* ---------- WRITING GAME (DAY 5) ---------- */
+const writingPrompts = {
+  romance: [
+    'Ceritakan tentang pertemuan pertama dua orang yang tak terduga di perpustakaan pada sore yang hujan...',
+    'Ada seorang gadis yang setiap hari menemukan bunga di mejanya, tapi tidak tahu dari siapa...',
+    'Dua sahabat lama bertemu kembali setelah 5 tahun — apa yang terjadi selanjutnya?',
+    'Tulis surat kepada seseorang yang belum pernah kamu temui tapi selalu ada di hatimu...',
+  ],
+  adventure: [
+    'Kamu menemukan peta kuno di buku tua — ke mana peta itu membawamu?',
+    'Dalam perjalanan pulang, kamu tersasar di hutan ajaib. Apa yang kamu temukan?',
+    'Sebuah pintu muncul di kamarmu tiba-tiba — kamu memberanikan diri membukanya...',
+    'Kamu adalah explorer pertama yang menemukan pulau tersembunyi di lautan luas...',
+  ],
+  daily: [
+    'Ceritakan tentang hari paling berkesan dalam hidupmu — dari sudut pandang orang lain...',
+    'Pagi hari yang sempurna menurutmu: bagaimana rasanya, suaranya, baunya?',
+    'Kamu menemukan diary lama dari 5 tahun lalu — apa yang ditulis di sana?',
+    'Deskripsikan momen sederhana yang membuatmu merasa paling hidup...',
+  ],
+  fantasy: [
+    'Di dunia di mana setiap orang punya kekuatan berdasarkan makanan favoritnya — apa kekuatanmu?',
+    'Ada seorang penyihir yang bisa melukis perasaan menjadi nyata — ceritakan kisahnya...',
+    'Kamu adalah penjaga perpustakaan ajaib di mana setiap buku membawamu ke dunia berbeda...',
+    'Seekor naga kecil tiba-tiba tinggal di halaman rumahmu — bagaimana hidupmu berubah?',
+  ],
+  friendship: [
+    'Ceritakan tentang sahabat terbaikmu — momen paling tak terlupakan bersama mereka...',
+    'Dua sahabat yang berjanji akan selalu ada untuk satu sama lain — uji janji itu...',
+    'Tulis tentang persahabatan yang tumbuh dari hal-hal kecil yang tidak terduga...',
+    'Sahabat yang mengerti tanpa perlu berkata-kata — gambarkan momen itu...',
+  ],
+  motivation: [
+    'Tulis surat dari dirimu di masa depan 5 tahun lagi untuk dirimu sekarang...',
+    'Hari paling sulit yang pernah kamu lalui — dan bagaimana kamu bangkit...',
+    'Ceritakan tentang mimpi terbesarmu dan langkah pertama untuk menggapainya...',
+    'Kamu adalah pahlawan dalam ceritamu sendiri — kisah apa yang ingin kamu ceritakan?',
+  ],
+};
+
+let writingTimerInterval = null;
+let writingSeconds = 0;
+let writingStarted = false;
+let selectedCategory = 'romance';
+
+function initWritingGame() {
+  const wrap = document.getElementById('writingGameWrap');
+  if (!wrap) return;
+
+  // Category buttons
+  const catBtns = wrap.querySelectorAll('.category-btn');
+  catBtns.forEach(btn => {
+    btn.onclick = () => {
+      catBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedCategory = btn.dataset.cat;
+      getNewPrompt();
+    };
+  });
+
+  // Get prompt button
+  const promptBtn = document.getElementById('getPromptBtn');
+  if (promptBtn) promptBtn.onclick = getNewPrompt;
+  getNewPrompt();
+
+  // Writing area
+  const textarea = document.getElementById('writingArea');
+  if (textarea) {
+    textarea.addEventListener('input', () => {
+      updateWritingStats(textarea.value);
+      if (!writingStarted && textarea.value.trim().length > 0) {
+        writingStarted = true;
+        startWritingTimer();
+      }
+    });
+    textarea.addEventListener('focus', () => {
+      if (!writingStarted) {
+        writingStarted = true;
+        startWritingTimer();
+      }
     });
   }
 
-  // Brush size
-  const sizeSlider = document.getElementById('brushSize');
-  if (sizeSlider) sizeSlider.oninput = e => brushSize = parseInt(e.target.value);
-
-  // Clear
-  const clearBtn = document.getElementById('clearCanvas');
+  // Clear button
+  const clearBtn = document.getElementById('clearWritingBtn');
   if (clearBtn) clearBtn.onclick = () => {
-    const rect = canvas.getBoundingClientRect();
-    ctx.fillStyle = '#fff8fc';
-    ctx.fillRect(0, 0, rect.width, rect.height);
+    if (textarea) { textarea.value = ''; updateWritingStats(''); }
+    stopWritingTimer();
+    writingStarted = false;
+    writingSeconds = 0;
+    updateTimerDisplay();
+    const res = document.getElementById('writingResult');
+    if (res) { res.style.display = 'none'; }
   };
 
-  // Save
-  const saveBtn = document.getElementById('saveCanvas');
+  // Save button
+  const saveBtn = document.getElementById('saveWritingBtn');
   if (saveBtn) saveBtn.onclick = () => {
+    if (!textarea || !textarea.value.trim()) return;
+    const blob = new Blob([textarea.value], { type: 'text/plain;charset=utf-8' });
     const a = document.createElement('a');
-    a.download = 'lukisan-Ecaaak.png';
-    a.href = canvas.toDataURL();
-    a.click();
+    a.download = 'cerita-ecaaak.txt'; a.href = URL.createObjectURL(blob); a.click();
   };
+
+  // Submit button
+  const submitBtn = document.getElementById('submitWritingBtn');
+  if (submitBtn) submitBtn.onclick = evaluateWriting;
+
+  animateProgress();
+}
+
+function getNewPrompt() {
+  const prompts = writingPrompts[selectedCategory] || writingPrompts.romance;
+  const idx = Math.floor(Math.random() * prompts.length);
+  const el = document.getElementById('writingPromptText');
+  if (el) {
+    el.style.opacity = '0';
+    setTimeout(() => { el.textContent = prompts[idx]; el.style.opacity = '1'; }, 200);
+  }
+}
+
+function updateWritingStats(text) {
+  const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+  const chars = text.length;
+  const wordEl = document.getElementById('wordCount');
+  const charEl = document.getElementById('charCount');
+  if (wordEl) wordEl.textContent = words + ' kata';
+  if (charEl) charEl.textContent = chars + ' karakter';
+
+  // Update challenges
+  const s50 = document.getElementById('status-50');
+  const s100 = document.getElementById('status-100');
+  const ch50 = document.getElementById('ch-50words');
+  const ch100 = document.getElementById('ch-100words');
+  if (s50) s50.textContent = Math.min(words, 50) + '/50';
+  if (s100) s100.textContent = Math.min(words, 100) + '/100';
+  if (ch50) ch50.classList.toggle('challenge-done', words >= 50);
+  if (ch100) ch100.classList.toggle('challenge-done', words >= 100);
+}
+
+function startWritingTimer() {
+  if (writingTimerInterval) return;
+  writingTimerInterval = setInterval(() => {
+    writingSeconds++;
+    updateTimerDisplay();
+    const mins5 = document.getElementById('status-5min');
+    const ch5 = document.getElementById('ch-5min');
+    if (mins5) mins5.textContent = Math.floor(writingSeconds/60) + ':' + String(writingSeconds%60).padStart(2,'0');
+    if (ch5) ch5.classList.toggle('challenge-done', writingSeconds >= 300);
+  }, 1000);
+}
+
+function stopWritingTimer() {
+  if (writingTimerInterval) { clearInterval(writingTimerInterval); writingTimerInterval = null; }
+}
+
+function updateTimerDisplay() {
+  const el = document.getElementById('writingTimer');
+  if (el) el.textContent = '⏱️ ' + Math.floor(writingSeconds/60) + ':' + String(writingSeconds%60).padStart(2,'0');
+}
+
+function evaluateWriting() {
+  const textarea = document.getElementById('writingArea');
+  const res = document.getElementById('writingResult');
+  if (!textarea || !res) return;
+  const text = textarea.value.trim();
+  const words = text ? text.split(/\s+/).length : 0;
+  res.style.display = 'block';
+  if (words === 0) {
+    res.innerHTML = '💭 <span>Yuk mulai nulis dulu! Satu kata pun sudah luar biasa 🌸</span>';
+    return;
+  }
+  const msgs = [
+    { min: 200, icon: '🏆', msg: `LUAR BIASA! ${words} kata! Kamu penulis sejati, Ecaaak! Bakatmu sungguh memukau 💕✨` },
+    { min: 100, icon: '🌟', msg: `WOW! ${words} kata! Kamu sungguh ekspresif dan berbakat — ceritamu pasti indah! 🌸` },
+    { min: 50, icon: '🎉', msg: `Hebat! ${words} kata sudah kamu tulis! Terus semangat — kamu sedang mekar! 📖💪` },
+    { min: 20, icon: '💕', msg: `Bagus sekali! ${words} kata untuk memulai. Setiap penulis besar pun dimulai dari sini! ✍️` },
+    { min: 1, icon: '🌱', msg: `Kamu sudah mulai! ${words} kata adalah langkah pertama yang luar biasa. Lanjutkan! 🌸` },
+  ];
+  const result = msgs.find(m => words >= m.min) || msgs[msgs.length-1];
+  res.innerHTML = `<div style="font-size:2rem;">${result.icon}</div><div style="font-weight:800;color:var(--pink-600);margin:.4rem 0;">${result.msg}</div>`;
 }
 
 /* ---------- QUIZ ---------- */
@@ -957,6 +1500,7 @@ function openModal(dayIndex) {
     initPuzzle();
     initBreathing();
     initGarden();
+    initWritingGame();
     initChecklist(`checklist-${day.content}`);
 
     // Day 6 special
@@ -976,6 +1520,9 @@ function closeModal() {
   clearInterval(catchSpawnInterval);
   breathRunning = false;
   clearTimeout(breathAnimTimeout);
+  stopWritingTimer();
+  writingStarted = false;
+  writingSeconds = 0;
 }
 
 function showLockedToast() {
