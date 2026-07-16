@@ -529,19 +529,199 @@
     .stat-val { font-weight: 800; color: var(--text-dark); font-size: 1rem; }
     .stat-sub { font-size: .72rem; color: var(--text-mid); }
 
-    /* Confetti canvas */
-    #confettiCanvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+    /* ── PRO PAINTING STUDIO (DAY 4) ── */
+    .pro-studio-wrap {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 2px solid var(--pink-200);
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(232,62,140,.12);
+      margin-bottom: 1rem;
+    }
+    .studio-toolbar {
+      background: linear-gradient(135deg, #2d1040, #1a2840);
+      padding: .8rem 1rem;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .toolbar-group {
+      display: flex;
+      flex-direction: column;
+      gap: .4rem;
+    }
+    .tool-label {
+      font-size: .68rem;
+      font-weight: 800;
+      color: rgba(255,255,255,.6);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .studio-tools {
+      display: flex;
+      gap: .3rem;
+      flex-wrap: wrap;
+    }
+    .tool-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: 2px solid rgba(255,255,255,.15);
+      background: rgba(255,255,255,.08);
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all .15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .tool-btn:hover {
+      background: rgba(255,255,255,.2);
+      border-color: rgba(255,255,255,.4);
+      transform: scale(1.1);
+    }
+    .tool-btn.active {
+      background: linear-gradient(135deg, var(--pink-400), var(--pink-600));
+      border-color: var(--pink-300);
+      box-shadow: 0 0 12px rgba(232,62,140,.5);
+    }
+    .studio-colors {
+      display: flex;
+      gap: .35rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .color-swatch {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform .15s, border-color .15s;
+      flex-shrink: 0;
+    }
+    .color-swatch:hover, .color-swatch.active {
+      transform: scale(1.25);
+      border-color: #fff;
+      outline: 2px solid var(--pink-300);
+    }
+    .size-display {
+      font-size: .72rem;
+      color: rgba(255,255,255,.6);
+      font-weight: 700;
+      min-width: 32px;
+    }
+    .studio-canvas-wrap {
+      position: relative;
+      width: 100%;
+      background: #fff8fc;
+    }
+    .studio-canvas-wrap canvas {
+      display: block;
+      width: 100%;
+      height: 340px;
+      touch-action: none;
+    }
+    .studio-canvas-wrap canvas#previewCanvasPro {
+      position: absolute;
+      top: 0;
+      left: 0;
       pointer-events: none;
-      z-index: 9999;
+    }
+    .studio-actions {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+      padding: .7rem 1rem;
+      background: var(--pink-50);
+      border-top: 1px solid var(--pink-100);
+    }
+    .studio-status {
+      padding: .4rem 1rem;
+      background: rgba(44, 27, 62, .05);
+      font-size: .78rem;
+      color: var(--text-mid);
+      font-weight: 600;
+      border-top: 1px solid var(--pink-100);
+    }
+
+    /* ── WRITING GAME (DAY 5) ── */
+    .category-btn {
+      padding: .4rem .9rem;
+      border-radius: 20px;
+      border: 2px solid var(--pink-200);
+      background: #fff;
+      color: var(--text-mid);
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      font-size: .8rem;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .category-btn:hover {
+      border-color: var(--pink-400);
+      color: var(--pink-500);
+      transform: translateY(-2px);
+    }
+    .category-btn.active {
+      background: linear-gradient(135deg, var(--pink-400), var(--pink-600));
+      border-color: transparent;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(232,62,140,.4);
+    }
+    .challenge-done {
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9) !important;
+      border-color: #a5d6a7 !important;
+    }
+    .challenge-done .challenge-status {
+      color: var(--matcha) !important;
+      font-weight: 800;
+    }
+
+    /* ── INTERACTIVE COOKIE STEP GAME ── */
+    .cookie-step-item {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(252, 211, 77, 0.25);
+      border-radius: 8px;
+      padding: .5rem .7rem;
+      cursor: pointer;
+      transition: all .2s;
+      user-select: none;
+    }
+    .cookie-step-item:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(252, 211, 77, 0.5);
+    }
+    .cookie-step-number {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(252, 211, 77, 0.2);
+      color: #fcd34d;
+      font-size: .75rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cookie-step-text {
+      font-size: .8rem;
+      color: rgba(255, 255, 255, 0.9);
     }
 
     @media (max-width: 520px) {
       .modal-body-inner { padding: 1.2rem 1rem; }
       .fact-grid { grid-template-columns: 1fr; }
       .stats-grid { grid-template-columns: 1fr; }
+      .studio-toolbar { gap: .6rem; }
+      .cookie-details-grid, .recipe-grid { grid-template-columns: 1fr; }
+      .category-grid { gap: .4rem; }
+      .studio-canvas-wrap canvas { height: 250px; }
     }
   </style>
 </head>
@@ -560,7 +740,7 @@
   <button class="day-tab" onclick="switchDay(2)">🍵 Hari 2</button>
   <button class="day-tab" onclick="switchDay(3)">📚 Hari 3</button>
   <button class="day-tab" onclick="switchDay(4)">🌸 Hari 4</button>
-  <button class="day-tab" onclick="switchDay(5)">💨 Hari 5</button>
+  <button class="day-tab" onclick="switchDay(5)">✍️ Hari 5</button>
   <button class="day-tab" onclick="switchDay(6)">🎉 Hari 6</button>
 </div>
 
@@ -725,51 +905,96 @@
 <div class="day-panel" id="panel-4">
   <div class="content-card">
     <div class="modal-day-header d4-hdr">
-      <div class="modal-day-emoji">🌸</div>
+      <div class="modal-day-emoji">🎨</div>
       <div class="modal-day-label">Hari ke-4 • Kamis 16 Juli</div>
-      <div class="modal-day-title">Tamanmu, Tamanku! 🌷</div>
+      <div class="modal-day-title">Studio Lukis Profesionalmu! 🖌️</div>
     </div>
     <div class="modal-body-inner">
       <div class="quote-card">
-        "Seperti bunga lily yang tumbuh indah meski di lumpur — kamu mekar paling cantik di tengah kesulitan."
+        "Seni adalah jiwa yang berbicara tanpa kata — dan lukisanmu, Ecaaak, selalu bicara tentang keindahan."
         <div class="quote-author">— Selalu kagum melihatmu, Ecaaak 🌸</div>
       </div>
       <div class="love-letter">
         Ecaaak,<br/><br/>
         Hari keempat! Kamu <strong>luar biasa sekali</strong> 🎉 Empat hari dengan rapat panjang, tapi kamu masih berdiri tegak. Aku bangga banget sama kamu 💕<br/><br/>
-        Untuk hari ini, aku buatkan taman bunga virtual khusus buat kamu. Setiap kali kamu klik taman, bunga pink lily akan tumbuh! 🌸🌷
+        Karena kamu suka melukis, hari ini aku buatkan <strong>studio lukis digital lengkap</strong> khusus buat kamu! Ada brush profesional, pensil, spray, fill tool, shapes, undo, opacity dan masih banyak lagi. Ekspresikan dirimu bebas! 🎨🖌️
       </div>
 
-      <div class="game-title">🌸 Taman Lily Virtual Ecaaak</div>
-      <div class="garden-wrap" id="gardenWrap" onclick="plantFlower(event)">
-        <div class="garden-hint" id="gardenHint">✨ Klik di mana saja untuk menumbuhkan bunga! ✨</div>
-      </div>
-      <div style="text-align:center;margin-bottom:1.2rem;">
-        <span style="font-size:.88rem;color:var(--text-mid);">Bunga tumbuh: <strong id="flowerCount">0</strong> 🌸</span>
-        <button class="draw-btn" id="resetGarden" style="margin-left:1rem;" onclick="resetGarden()">🔄 Reset Taman</button>
+      <!-- Pro Studio -->
+      <div class="pro-studio-wrap" id="proStudioWrap">
+        <!-- Toolbar -->
+        <div class="studio-toolbar" id="studioToolbar">
+          <div class="toolbar-group">
+            <div class="tool-label">🖌️ Tool</div>
+            <div class="studio-tools">
+              <button class="tool-btn active" data-tool="pen" title="Pen">✏️</button>
+              <button class="tool-btn" data-tool="brush" title="Brush Lembut">🖌️</button>
+              <button class="tool-btn" data-tool="spray" title="Spray">🎨</button>
+              <button class="tool-btn" data-tool="eraser" title="Eraser">🗑️</button>
+              <button class="tool-btn" data-tool="line" title="Garis Lurus">📏</button>
+              <button class="tool-btn" data-tool="rect" title="Persegi">⬜</button>
+              <button class="tool-btn" data-tool="circle" title="Lingkaran">⭕</button>
+              <button class="tool-btn" data-tool="fill" title="Fill Warna">🪣</button>
+            </div>
+          </div>
+          <div class="toolbar-group">
+            <div class="tool-label">🎨 Warna</div>
+            <div class="studio-colors" id="studioColors">
+              <div class="color-swatch active" style="background:#ff80b5" data-color="#ff80b5"></div>
+              <div class="color-swatch" style="background:#e83e8c" data-color="#e83e8c"></div>
+              <div class="color-swatch" style="background:#c2185b" data-color="#c2185b"></div>
+              <div class="color-swatch" style="background:#ff5722" data-color="#ff5722"></div>
+              <div class="color-swatch" style="background:#ffd54f" data-color="#ffd54f"></div>
+              <div class="color-swatch" style="background:#6b8f71" data-color="#6b8f71"></div>
+              <div class="color-swatch" style="background:#42a5f5" data-color="#42a5f5"></div>
+              <div class="color-swatch" style="background:#9c27b0" data-color="#9c27b0"></div>
+              <div class="color-swatch" style="background:#333333" data-color="#333333"></div>
+              <div class="color-swatch" style="background:#ffffff;border:2px solid #ccc" data-color="#ffffff"></div>
+              <input type="color" id="customColorPicker" value="#ff80b5" title="Pilih warna custom" style="width:28px;height:28px;border:none;border-radius:50%;cursor:pointer;padding:0;" />
+            </div>
+          </div>
+          <div class="toolbar-group">
+            <div class="tool-label">📏 Ukuran: <span id="sizeDisplay">8px</span></div>
+            <input type="range" class="size-slider" id="studioSize" min="1" max="60" value="8" />
+          </div>
+          <div class="toolbar-group">
+            <div class="tool-label">💧 Opacity: <span id="opacityDisplay">100%</span></div>
+            <input type="range" class="size-slider" id="studioOpacity" min="10" max="100" value="100" />
+          </div>
+        </div>
+
+        <!-- Canvas Area -->
+        <div class="studio-canvas-wrap">
+          <canvas id="drawCanvasPro" width="600" height="360"></canvas>
+          <canvas id="previewCanvasPro" width="600" height="360"></canvas>
+        </div>
+
+        <!-- Bottom Actions -->
+        <div class="studio-actions">
+          <button class="draw-btn" id="undoBtn">↩️ Undo</button>
+          <button class="draw-btn" id="clearCanvas">🗑️ Hapus Semua</button>
+          <button class="draw-btn" id="fillBg">🌈 Warna Latar</button>
+          <button class="draw-btn" id="saveCanvas" style="background:linear-gradient(135deg,var(--pink-400),var(--pink-600));color:#fff;">💾 Simpan Lukisan</button>
+        </div>
+
+        <!-- Status Bar -->
+        <div class="studio-status" id="studioStatus">✏️ Pen — Klik dan seret untuk melukis!</div>
       </div>
 
-      <div class="tip-box" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0)">
+      <div class="tip-box" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);margin-top:1rem;">
+        <h4>🎨 Tips Pro untuk Ecaaak</h4>
+        <p>✨ <strong>Pen</strong>: garis tegas presisi | 🖌️ <strong>Brush</strong>: sapuan lembut | 🎨 <strong>Spray</strong>: efek kabut artistik | 🪣 <strong>Fill</strong>: isi area warna | ⬜⭕ <strong>Shape</strong>: bentuk geometris | 📏 <strong>Line</strong>: garis lurus sempurna | ↩️ <strong>Undo</strong>: batalkan langkah</p>
+      </div>
+
+      <div class="tip-box" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
         <h4>🌷 Fakta Bunga Lily Pink</h4>
         <p>Bunga lily pink melambangkan <strong>kasih sayang, kecantikan, dan keberuntungan</strong>. Di banyak budaya, lily adalah simbol wanita yang kuat dan anggun — persis seperti kamu, Ecaaak! 🌸</p>
       </div>
 
-      <div class="game-title">✏️ Tantangan Menggambar Mini</div>
-      <canvas id="drawCanvas2" width="600" height="180"></canvas>
-      <div class="draw-controls">
-        <div class="color-btn active" style="background:#ff80b5" data-color="#ff80b5" data-canvas="drawCanvas2"></div>
-        <div class="color-btn" style="background:#e83e8c" data-color="#e83e8c" data-canvas="drawCanvas2"></div>
-        <div class="color-btn" style="background:#6b8f71" data-color="#6b8f71" data-canvas="drawCanvas2"></div>
-        <div class="color-btn" style="background:#ffd54f" data-color="#ffd54f" data-canvas="drawCanvas2"></div>
-        <div class="color-btn" style="background:#fff;border:2px solid #eee" data-color="#ffffff" data-canvas="drawCanvas2"></div>
-        <input type="range" class="size-slider" id="brushSize2" min="2" max="30" value="6" />
-        <button class="draw-btn" onclick="clearCanvas('drawCanvas2','brushSize2')">🗑️ Hapus</button>
-      </div>
-      <p style="font-size:.8rem;color:var(--text-light);margin-top:.3rem;margin-bottom:1.2rem;">Tantangan: gambar bunga lily pinkmu sendiri! 🌸</p>
-
-      <ul class="checklist">
-        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Perhatikan hal indah kecil hari ini 🌺</span></li>
+      <ul class="checklist" style="margin-top:1.2rem;">
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Lukis sesuatu yang kamu suka hari ini 🎨</span></li>
         <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Tersenyum pada diri sendiri di cermin 😊</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Simpan lukisanmu sebagai kenangan! 💾</span></li>
         <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Ingat: 2 hari lagi dan semuanya selesai! 💪</span></li>
       </ul>
     </div>
@@ -780,36 +1005,92 @@
 <div class="day-panel" id="panel-5">
   <div class="content-card">
     <div class="modal-day-header d5-hdr">
-      <div class="modal-day-emoji">💨</div>
+      <div class="modal-day-emoji">✍️</div>
       <div class="modal-day-label">Hari ke-5 • Jumat 17 Juli</div>
       <div class="modal-day-title">Hampir Sampai, Ecaaak! 🌟</div>
     </div>
     <div class="modal-body-inner">
       <div class="quote-card">
-        "Puncak gunung tidak akan kabur — ia menunggumu dengan sabar. Teruslah melangkah."
-        <div class="quote-author">— Untuk Ecaaak di hari kelima 🏔️💕</div>
+        "Kata-kata adalah jembatan antara hati dan dunia — dan ceritamu, Ecaaak, selalu membuatku terpukau."
+        <div class="quote-author">— Untuk Ecaaak di hari kelima ✍️💕</div>
       </div>
       <div class="love-letter">
         Ecaaak,<br/><br/>
-        <strong>HARI KELIMA!</strong> 🎊 Kamu hampir sampai di garis akhir! Tinggal satu hari lagi — kamu sudah melewati yang terberatnya dengan sangat indah 🌸<br/><br/>
-        Hari ini aku ingin mengajakmu untuk <strong>bernapas bersama</strong>. Ikuti latihan pernapasan ini — terbukti secara ilmiah bisa menurunkan stres dalam 2 menit saja! 🍃
+        <strong>HARI KELIMA!</strong> 🎊 Kamu hampir sampai di garis akhir! Tinggal satu hari lagi setelah ini — kamu sudah melewati yang terberatnya dengan sangat indah 🌸<br/><br/>
+        Kamu suka membaca, tapi hari ini aku ingin kamu jadi <strong>penulisnya</strong>! Main game menulis kreatif ini — pilih kategori cerita, dapatkan prompt seru, lalu tulis cerita pendekmu. Ekspresikan hatimu dengan kata-kata! ✍️📖
       </div>
 
-      <div class="breath-container">
-        <div class="breath-circle" id="breathCircle" onclick="startBreathing()">Mulai</div>
-        <div class="breath-label" id="breathLabel">Tekan lingkaran untuk memulai latihan napas 🌬️</div>
-        <button class="breath-btn" id="breathBtn" onclick="startBreathing()">🌬️ Mulai Latihan Napas</button>
-        <div style="font-size:.8rem;color:var(--text-light);text-align:center;">
-          Sesi: <strong id="breathCount">0</strong>/4 napas
+      <div class="writing-game-wrap" id="writingGameWrap">
+        <!-- Category Selection -->
+        <div class="game-title">📖 Pilih Kategori Ceritamu</div>
+        <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem;">
+          <button class="category-btn active" data-cat="romance">💕 Romansa</button>
+          <button class="category-btn" data-cat="adventure">🌟 Petualangan</button>
+          <button class="category-btn" data-cat="daily">☕ Keseharian</button>
+          <button class="category-btn" data-cat="fantasy">🧚 Fantasi</button>
+          <button class="category-btn" data-cat="friendship">🌸 Persahabatan</button>
+          <button class="category-btn" data-cat="motivation">💪 Motivasi</button>
+        </div>
+
+        <!-- Writing Prompt -->
+        <div class="writing-prompt-box" style="background:linear-gradient(135deg,var(--pink-50),#fce4ec);border-radius:14px;padding:1rem 1.2rem;margin-bottom:1rem;border:1.5px solid var(--pink-200);">
+          <div style="font-size:.78rem;font-weight:700;color:var(--pink-500);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem;">✨ Prompt Ceritamu:</div>
+          <div id="writingPromptText" style="font-family:'Playfair Display',serif;font-style:italic;font-size:.92rem;color:var(--text-dark);line-height:1.7;transition:opacity .3s;">Klik "Dapat Prompt" untuk mendapatkan inspirasi menulis!</div>
+          <button class="draw-btn" id="getPromptBtn" style="margin-top:.8rem;">🎲 Dapat Prompt Baru</button>
+        </div>
+
+        <!-- Writing Area -->
+        <div style="margin-bottom:.5rem;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;">
+            <div class="game-title" style="margin-bottom:0;">✍️ Tulis Ceritamu di Sini</div>
+            <div style="display:flex;gap:.8rem;font-size:.78rem;color:var(--text-mid);font-weight:600;">
+              <span id="wordCount">0 kata</span>
+              <span id="charCount">0 karakter</span>
+              <span id="writingTimer" style="color:var(--pink-500);">⏱️ 0:00</span>
+            </div>
+          </div>
+          <textarea id="writingArea" style="width:100%;min-height:160px;border-radius:12px;border:2px solid var(--pink-200);padding:1rem;font-family:'Nunito',sans-serif;font-size:.9rem;color:var(--text-dark);resize:vertical;outline:none;background:#fff8fc;line-height:1.7;" placeholder="Mulai ceritamu di sini... tulis apa saja yang ada di hatimu 💕&#10;&#10;Nggak ada yang menghakimi — ini ruang ekspresimu sendiri! 🌸"></textarea>
+        </div>
+
+        <!-- Writing Tools -->
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;">
+          <button class="draw-btn" id="clearWritingBtn">🗑️ Hapus</button>
+          <button class="draw-btn" id="saveWritingBtn">💾 Simpan Cerita</button>
+          <button class="draw-btn" id="submitWritingBtn" style="background:linear-gradient(135deg,var(--pink-400),var(--pink-600));color:#fff;">✨ Selesai &amp; Nilai!</button>
+        </div>
+
+        <!-- Writing Result -->
+        <div id="writingResult" style="display:none;background:linear-gradient(135deg,var(--pink-50),#fce4ec);border-radius:14px;padding:1rem 1.2rem;margin-bottom:1rem;border:1.5px solid var(--pink-200);text-align:center;"></div>
+
+        <!-- Writing Challenges -->
+        <div style="background:var(--pink-50);border-radius:14px;padding:1rem 1.2rem;border:1.5px solid var(--pink-100);margin-bottom:1rem;">
+          <div class="game-title" style="margin-bottom:.8rem;">🏆 Tantangan Menulis</div>
+          <div style="display:flex;flex-direction:column;gap:.5rem;">
+            <div id="ch-50words" style="display:flex;align-items:center;gap:.7rem;padding:.6rem .8rem;background:#fff;border-radius:10px;border:1.5px solid var(--pink-100);transition:all .3s;">
+              <span style="font-size:1.3rem;">📝</span>
+              <span style="flex:1;font-size:.85rem;font-weight:600;color:var(--text-dark);">Tulis minimal 50 kata</span>
+              <span id="status-50" style="font-size:.78rem;font-weight:800;color:var(--pink-500);">0/50</span>
+            </div>
+            <div id="ch-100words" style="display:flex;align-items:center;gap:.7rem;padding:.6rem .8rem;background:#fff;border-radius:10px;border:1.5px solid var(--pink-100);transition:all .3s;">
+              <span style="font-size:1.3rem;">✍️</span>
+              <span style="flex:1;font-size:.85rem;font-weight:600;color:var(--text-dark);">Tulis minimal 100 kata</span>
+              <span id="status-100" style="font-size:.78rem;font-weight:800;color:var(--pink-500);">0/100</span>
+            </div>
+            <div id="ch-5min" style="display:flex;align-items:center;gap:.7rem;padding:.6rem .8rem;background:#fff;border-radius:10px;border:1.5px solid var(--pink-100);transition:all .3s;">
+              <span style="font-size:1.3rem;">⏱️</span>
+              <span style="flex:1;font-size:.85rem;font-weight:600;color:var(--text-dark);">Tulis selama 5 menit</span>
+              <span id="status-5min" style="font-size:.78rem;font-weight:800;color:var(--pink-500);">0:00</span>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="tip-box">
-        <h4>🧘 Teknik 4-7-8 untuk Ecaaak</h4>
-        <p>Hirup 4 detik → Tahan 7 detik → Hembuskan 8 detik. Ulangi 4x. Teknik ini menenangkan sistem saraf dan membuatmu lebih fokus untuk rapat malam ini! 💆</p>
+        <h4>✍️ Tips Menulis untuk Ecaaak</h4>
+        <p>Jangan khawatir soal tata bahasa atau ejaan — tulis saja apa yang ada di hati. Menulis bebas selama 5-10 menit bisa membantu meredakan stres dan merefresh pikiran. Kamu sudah baca banyak buku, sekarang giliran kamu jadi penulisnya! 📚💕</p>
       </div>
 
-      <div class="game-title">💆 Progress Mingguanmu</div>
+      <div class="game-title" style="margin-top:1rem;">💆 Progress Mingguanmu</div>
       <div style="margin-bottom:.5rem;font-size:.85rem;color:var(--text-mid);">Kamu sudah melewati...</div>
       <div class="progress-bar-wrap">
         <div class="progress-bar-fill" id="weekProgress" style="width:0%"></div>
@@ -824,7 +1105,7 @@
       </div>
 
       <ul class="checklist">
-        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Lakukan latihan napas 4x hari ini 🌬️</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Tulis cerita pendek hari ini ✍️</span></li>
         <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Makan sesuatu yang enak sebagai reward 🍜</span></li>
         <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Ingat: besok adalah hari terakhir! 🎉</span></li>
       </ul>
@@ -855,8 +1136,8 @@
       <div class="love-letter">
         Ecaaak,<br/><br/>
         <strong>HARI INI ADALAH HARI TERAKHIR!</strong> 🎉🎊 Kamu sudah melewati 6 hari yang luar biasa dengan sangat gagah berani — dan kamu TETAP berdiri dengan kepala tegak dan senyum ceriamu yang khas.<br/><br/>
-        Kamu adalah wanita yang paling kuat yang aku kenal. Aku cinta kamu, Ecaaak 🌸💕<br/><br/>
-        Sekarang, sebagai hadiah terakhir — <strong>tangkap seblak dan gacoan virtual</strong> sebagai perayaanmu! 🍜🔥
+        Kamu adalah wanita yang paling kuat yang aku kenal. Keceriaanmu adalah kekuatanmu, dan hobimu menggambar dan membaca adalah jiwa yang membuatmu begitu indah.<br/><br/>
+        Sekarang, sebagai hadiah terakhir — <strong>tangkap makanan favoritmu</strong> dan ada <strong>hadiah spesial Dubai Chewy Cookie</strong> yang menunggumu! 🍜🔥🍪✨
       </div>
 
       <div class="game-title">🎮 Tangkap Makanan Favoritmu!</div>
@@ -866,15 +1147,100 @@
         <button class="catch-start-btn" id="catchStartBtn" onclick="startCatchGame()">🍜 Mulai Game!</button>
         <div class="catch-end-msg" id="catchEndMsg"></div>
       </div>
-      <p style="font-size:.8rem;color:var(--text-light);margin-top:.3rem;margin-bottom:1.4rem;">Klik makanan yang jatuh untuk menangkapnya! 🎯</p>
+      <p style="font-size:.8rem;color:var(--text-light);margin-top:.3rem;margin-bottom:1.4rem;">Klik makanan yang jatuh untuk menangkapnya! Seblak &amp; cookie pasti bikin skor tinggi! 🎯🍪</p>
 
       <div class="tip-box" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0);">
         <h4>🎊 Rencanakan Hadiahmu!</h4>
         <p>Kamu berhak makan <strong>seblak</strong> atau <strong>gacoan</strong> favorit sebagai perayaan! Kamu sudah bekerja keras — sekarang saatnya menikmati 🍜🔥 Minta temenin ya!</p>
       </div>
 
+      <!-- Dubai Chewy Cookie Section -->
+      <div style="background:linear-gradient(135deg,#1a0628,#2d1040);border-radius:20px;padding:1.5rem;margin-bottom:1.4rem;overflow:hidden;position:relative;">
+        <div style="position:absolute;top:-20px;right:-20px;font-size:5rem;opacity:.1;">🍪</div>
+        <div style="text-align:center;margin-bottom:1rem;">
+          <div style="display:inline-block;background:linear-gradient(135deg,#d97706,#fcd34d);color:#1a0628;font-size:.7rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:.3rem .9rem;border-radius:20px;margin-bottom:.6rem;">🏆 HADIAH SPESIAL</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.5rem;color:#fcd34d;font-weight:700;margin-bottom:.2rem;">🍪 Dubai Chewy Cookie</div>
+          <div style="font-size:.85rem;color:rgba(255,255,255,.7);">Untuk Ecaaak yang luar biasa! ✨</div>
+        </div>
+
+        <div style="background:rgba(255,255,255,.08);border-radius:14px;padding:1rem 1.1rem;margin-bottom:1rem;border:1px solid rgba(252,211,77,.2);">
+          <div style="display:flex;gap:.8rem;align-items:flex-start;">
+            <div style="font-size:2.2rem;flex-shrink:0;">🍪</div>
+            <div>
+              <h4 style="color:#fcd34d;font-size:.9rem;margin-bottom:.4rem;">Apa itu Dubai Chewy Cookie?</h4>
+              <p style="font-size:.83rem;color:rgba(255,255,255,.8);line-height:1.6;">Dubai Chewy Cookie adalah camilan viral kekinian yang terinspirasi dari dessert Timur Tengah! Teksturnya super <strong style="color:#fcd34d;">kenyal dan chewy</strong> dari lapisan marshmallow cokelat yang meleleh di mulut, dengan isian <strong style="color:#fcd34d;">pasta pistachio + kataifi</strong> (mi tipis renyah khas kunafe) yang gurih dan mewah. Perpaduan manis-gurih yang bikin nagih! 😍</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1rem;">
+          <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:.8rem;border:1px solid rgba(252,211,77,.15);">
+            <div style="font-size:1.3rem;margin-bottom:.3rem;">🌟</div>
+            <div style="font-size:.82rem;font-weight:800;color:#fcd34d;margin-bottom:.2rem;">Tekstur Unik</div>
+            <div style="font-size:.75rem;color:rgba(255,255,255,.7);line-height:1.5;">Lapisan luar kenyal dari marshmallow yang meleleh di mulut</div>
+          </div>
+          <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:.8rem;border:1px solid rgba(252,211,77,.15);">
+            <div style="font-size:1.3rem;margin-bottom:.3rem;">🥜</div>
+            <div style="font-size:.82rem;font-weight:800;color:#fcd34d;margin-bottom:.2rem;">Isian Pistachio</div>
+            <div style="font-size:.75rem;color:rgba(255,255,255,.7);line-height:1.5;">Pasta pistachio premium yang kaya rasa dan creamy</div>
+          </div>
+          <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:.8rem;border:1px solid rgba(252,211,77,.15);">
+            <div style="font-size:1.3rem;margin-bottom:.3rem;">✨</div>
+            <div style="font-size:.82rem;font-weight:800;color:#fcd34d;margin-bottom:.2rem;">Kataifi Renyah</div>
+            <div style="font-size:.75rem;color:rgba(255,255,255,.7);line-height:1.5;">Mi tipis ala kunafe yang digoreng garing sebagai isian</div>
+          </div>
+          <div style="background:rgba(255,255,255,.07);border-radius:12px;padding:.8rem;border:1px solid rgba(252,211,77,.15);">
+            <div style="font-size:1.3rem;margin-bottom:.3rem;">🌍</div>
+            <div style="font-size:.82rem;font-weight:800;color:#fcd34d;margin-bottom:.2rem;">Viral Internasional</div>
+            <div style="font-size:.75rem;color:rgba(255,255,255,.7);line-height:1.5;">Terinspirasi dessert mewah Dubai yang sedang trending!</div>
+          </div>
+        </div>
+
+        <!-- Recipe -->
+        <div style="background:rgba(255,255,255,.05);border-radius:14px;padding:1rem;border:1px solid rgba(252,211,77,.2);margin-bottom:1rem;">
+          <div style="font-size:.85rem;font-weight:800;color:#fcd34d;margin-bottom:.8rem;">📋 Bahan-bahan Dubai Chewy Cookie</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;">
+            <div>
+              <div style="font-size:.78rem;font-weight:800;color:rgba(252,211,77,.9);margin-bottom:.4rem;">🍫 Lapisan Luar</div>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:.25rem;">
+                <li style="font-size:.75rem;color:rgba(255,255,255,.75);display:flex;gap:.4rem;"><span>•</span>250 gr Marshmallow</li>
+                <li style="font-size:.75rem;color:rgba(255,255,255,.75);display:flex;gap:.4rem;"><span>•</span>50 gr Mentega</li>
+                <li style="font-size:.75rem;color:rgba(255,255,255,.75);display:flex;gap:.4rem;"><span>•</span>30 gr Cokelat bubuk</li>
+                <li style="font-size:.75rem;color:rgba(255,255,255,.75);display:flex;gap:.4rem;"><span>•</span>10 gr Susu bubuk</li>
+              </ul>
+            </div>
+            <div>
+              <div style="font-size:.78rem;font-weight:800;color:rgba(252,211,77,.9);margin-bottom:.4rem;">🥜 Isian Lezat</div>
+              <ul style="list-style:none;display:flex;flex-direction:column;gap:.25rem;">
+                <li style="font-size:.75rem;color:rgba(255,255,255,.75);display:flex;gap:.4rem;"><span>•</span>150 gr Kataifi/Kunafe</li>
+                <li style="font-size:.75rem;color:rgba(255,255,255,.75);display:flex;gap:.4rem;"><span>•</span>250 gr Pistachio spread</li>
+                <li style="font-size:.75rem;color:rgba(255,255,255,.75);display:flex;gap:.4rem;"><span>•</span>Kacang pistachio cincang</li>
+                <li style="font-size:.75rem;color:rgba(255,255,255,.75);display:flex;gap:.4rem;"><span>•</span>Sedikit mentega sangrai</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cookie Quiz interactive -->
+        <div style="background:rgba(255,255,255,.07);border-radius:14px;padding:1rem;border:1px solid rgba(252,211,77,.2);margin-bottom:.8rem;">
+          <div style="font-size:.85rem;font-weight:800;color:#fcd34d;margin-bottom:.6rem;">🎯 Tebak Langkah Pembuatan!</div>
+          <div style="font-size:.82rem;color:rgba(255,255,255,.8);margin-bottom:.8rem;">Susun urutan langkah membuat Dubai Chewy Cookie:</div>
+          <div id="cookieSteps" style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:.7rem;"></div>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+            <button onclick="checkCookieOrder()" style="padding:.4rem 1rem;border-radius:20px;border:none;background:linear-gradient(135deg,#d97706,#fcd34d);color:#1a0628;font-family:'Nunito',sans-serif;font-weight:800;font-size:.8rem;cursor:pointer;">✓ Cek Urutan</button>
+            <button onclick="shuffleCookieSteps()" style="padding:.4rem .9rem;border-radius:20px;border:1px solid rgba(252,211,77,.4);background:transparent;color:rgba(252,211,77,.8);font-family:'Nunito',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;">🔄 Acak Ulang</button>
+          </div>
+          <div id="cookieStepResult" style="margin-top:.6rem;font-size:.85rem;font-weight:700;"></div>
+        </div>
+
+        <div style="text-align:center;padding:.8rem;">
+          <div style="font-size:1.8rem;margin-bottom:.5rem;">🍪💕</div>
+          <p style="font-size:.84rem;color:rgba(255,255,255,.85);line-height:1.6;"><strong style="color:#fcd34d;">Hadiah untukmu, Ecaaak!</strong> Setelah semua kerja keras ini, kamu SANGAT pantas mencoba Dubai Chewy Cookie yang mewah dan viral ini. Ini bukan sekadar camilan — ini adalah perayaan atas semua perjuanganmu selama 6 hari! 🏆✨</p>
+        </div>
+      </div>
+
       <div style="background:linear-gradient(135deg,var(--pink-50),#fce4ec);border-radius:16px;padding:1.5rem;border:1.5px solid var(--pink-200);margin-bottom:1.4rem;text-align:center;">
-        <div style="font-size:2.2rem;margin-bottom:.8rem;">🌸🍵🎨📚🌸</div>
+        <div style="font-size:2.5rem;margin-bottom:.8rem;">🌸🍵🎨📚🍪</div>
         <p style="font-family:'Playfair Display',serif;font-size:1rem;color:var(--text-dark);line-height:1.8;">
           Terima kasih sudah menjadi dirimu sendiri —<br/>
           si ceria yang suka lily pink, matcha, menggambar, dan membaca.<br/>
@@ -885,8 +1251,8 @@
 
       <ul class="checklist">
         <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Makan seblak atau gacoan sebagai reward! 🍜</span></li>
+        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Coba buat atau beli Dubai Chewy Cookie 🍪</span></li>
         <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Istirahat yang cukup malam ini 😴</span></li>
-        <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Gambar sesuatu sebagai kenangan minggu ini 🎨</span></li>
         <li onclick="toggleCheck(this)"><div class="check-box"></div><span>Ingat kamu luar biasa dan dicintai sepenuhnya 💕</span></li>
       </ul>
     </div>

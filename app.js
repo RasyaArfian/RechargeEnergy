@@ -64,11 +64,11 @@ const DAYS = [
     date: '2026-07-16',
     label: 'Hari ke-4',
     dayName: 'Kamis, 16 Juli',
-    emoji: '🌸',
-    title: 'Tanam Bunga Lilymu!',
-    desc: 'Klik untuk menanam lily pinkmu di taman virtual ajaib!',
-    tag: 'Virtual Garden',
-    tagClass: '',
+    emoji: '🎨',
+    title: 'Studio Lukis Profesional!',
+    desc: 'Lukis mahakaryamu dengan brush lembut, spray, fill, dan shape pro!',
+    tag: 'Pro Paint Studio',
+    tagClass: 'unlocked',
     content: 'day4',
   },
   {
@@ -86,9 +86,9 @@ const DAYS = [
     date: '2026-07-18',
     label: 'Hari ke-6',
     dayName: 'Sabtu, 18 Juli',
-    emoji: '🎉',
-    title: 'Kamu Berhasil,  Ecaaak!',
-    desc: 'Hari terakhir — tangkap seblak & gacoan virtualmu sebagai hadiah!',
+    emoji: '🍪',
+    title: 'Kamu Berhasil + Dubai Cookie! 🏆',
+    desc: 'Hari terakhir — tangkap makanan favoritmu & klaim hadiah Dubai Chewy Cookie!',
     tag: 'Perayaan + Game',
     tagClass: 'unlocked',
     content: 'day6',
@@ -595,6 +595,18 @@ const contentRenderers = {
             </div>
           </div>
 
+          <!-- Cookie Quiz interactive -->
+          <div style="background:rgba(0,0,0,0.03);border-radius:14px;padding:1rem;border:1.5px solid #f5d76e;margin-bottom:1rem;">
+            <div style="font-size:.85rem;font-weight:800;color:#92400e;margin-bottom:.6rem;">🎯 Tebak Langkah Pembuatan!</div>
+            <div style="font-size:.82rem;color:#78350f;margin-bottom:.8rem;">Susun urutan langkah membuat Dubai Chewy Cookie:</div>
+            <div id="cookieSteps" style="display:flex;flex-direction:column;gap:.4rem;margin-bottom:.7rem;"></div>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+              <button onclick="checkCookieOrder()" style="padding:.4rem 1rem;border-radius:20px;border:none;background:linear-gradient(135deg,#c8860a,#f5d76e);color:#fff;font-family:'Nunito',sans-serif;font-weight:800;font-size:.8rem;cursor:pointer;">✓ Cek Urutan</button>
+              <button onclick="shuffleCookieSteps()" style="padding:.4rem .9rem;border-radius:20px;border:1px solid #f5d76e;background:transparent;color:#92400e;font-family:'Nunito',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;">🔄 Acak Ulang</button>
+            </div>
+            <div id="cookieStepResult" style="margin-top:.6rem;font-size:.85rem;font-weight:700;"></div>
+          </div>
+
           <div class="cookie-message">
             <div style="font-size:2rem;">🍪💕</div>
             <p><strong>Hadiah untukmu,  Ecaaak!</strong> Setelah semua kerja keras ini, kamu SANGAT pantas mencoba Dubai Chewy Cookie yang mewah dan viral ini. Ini bukan sekadar camilan — ini adalah perayaan atas semua perjuanganmu selama 6 hari! 🏆✨</p>
@@ -666,7 +678,7 @@ function startCatchGame() {
   document.getElementById('catchScore').textContent = 0;
   document.getElementById('catchTimer').textContent = 30;
 
-  const foods = ['🍜','🌶️','🔥','🍳','🫙','🌸','🍵','🎉','💕'];
+  const foods = ['🍜','🌶️','🔥','🍳','🫙','🌸','🍵','🎉','💕','🍲','🍪','🍪'];
 
   catchSpawnInterval = setInterval(() => {
     if (!catchRunning) return;
@@ -678,7 +690,30 @@ function startCatchGame() {
     item.style.animationDuration = dur + 's';
     item.addEventListener('click', () => {
       if (!catchRunning) return;
-      catchScore++;
+      let points = 1;
+      if (item.textContent === '🍪') {
+        points = 3;
+        const toast = document.createElement('div');
+        toast.textContent = '+3 Dubai Cookie! 🍪';
+        toast.style.cssText = `
+          position: absolute;
+          left: ${item.style.left};
+          top: ${item.offsetTop}px;
+          color: #d97706;
+          font-weight: 900;
+          font-size: 1rem;
+          pointer-events: none;
+          transition: all 0.5s ease-out;
+          z-index: 10;
+        `;
+        wrap.appendChild(toast);
+        setTimeout(() => {
+          toast.style.transform = 'translateY(-30px)';
+          toast.style.opacity = '0';
+        }, 50);
+        setTimeout(() => toast.remove(), 600);
+      }
+      catchScore += points;
       document.getElementById('catchScore').textContent = catchScore;
       item.style.transform = 'scale(2)';
       item.style.opacity = '0';
@@ -772,17 +807,19 @@ function initProStudio(canvas, previewCanvas) {
   const pCtx = previewCanvas.getContext('2d');
   const statusEl = document.getElementById('studioStatus');
 
+  const ratio = window.devicePixelRatio || 1;
   const setupCanvas = (c, cx) => {
     const rect = c.getBoundingClientRect();
-    const r = window.devicePixelRatio || 1;
-    c.width = rect.width * r;
-    c.height = rect.height * r;
-    cx.scale(r, r);
+    c._cssWidth = rect.width;
+    c._cssHeight = rect.height;
+    c.width = rect.width * ratio;
+    c.height = rect.height * ratio;
+    cx.setTransform(ratio, 0, 0, ratio, 0, 0);
   };
   setupCanvas(canvas, ctx);
   setupCanvas(previewCanvas, pCtx);
   ctx.fillStyle = '#fff8fc';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(0, 0, canvas._cssWidth, canvas._cssHeight);
 
   let tool = 'pen';
   let color = '#ff80b5';
@@ -790,6 +827,7 @@ function initProStudio(canvas, previewCanvas) {
   let opacity = 1;
   let painting = false;
   let startX = 0, startY = 0;
+  let shapeStartX = 0, shapeStartY = 0;
   let undoStack = [];
   let sprayInterval = null;
 
@@ -909,6 +947,7 @@ function initProStudio(canvas, previewCanvas) {
     const p = getPos(e);
     painting = true;
     startX = p.x; startY = p.y;
+    shapeStartX = p.x; shapeStartY = p.y;
     saveUndo();
 
     if (tool === 'fill') {
@@ -918,7 +957,7 @@ function initProStudio(canvas, previewCanvas) {
     }
     if (tool === 'spray') {
       drawSpray(p.x, p.y);
-      sprayInterval = setInterval(() => { const p2 = { x: startX, y: startY }; drawSpray(p2.x, p2.y); }, 30);
+      sprayInterval = setInterval(() => { drawSpray(startX, startY); }, 30);
     } else if (tool !== 'line' && tool !== 'rect' && tool !== 'circle') {
       ctx.beginPath();
       ctx.moveTo(p.x, p.y);
@@ -942,7 +981,7 @@ function initProStudio(canvas, previewCanvas) {
     } else if (tool === 'eraser') {
       ctx.clearRect(p.x - size/2, p.y - size/2, size, size);
     } else if (tool === 'line' || tool === 'rect' || tool === 'circle') {
-      drawShape(startX, startY, p.x, p.y);
+      drawShape(shapeStartX, shapeStartY, p.x, p.y);
     }
   };
 
@@ -950,8 +989,8 @@ function initProStudio(canvas, previewCanvas) {
     if (!painting) return;
     const p = getPos(e);
     if (tool === 'line' || tool === 'rect' || tool === 'circle') {
-      ctx.drawImage(previewCanvas, 0, 0, canvas.width/2, canvas.height/2);
-      pCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+      ctx.drawImage(previewCanvas, 0, 0, canvas._cssWidth, canvas._cssHeight);
+      pCtx.clearRect(0, 0, previewCanvas._cssWidth, previewCanvas._cssHeight);
     }
     if (sprayInterval) { clearInterval(sprayInterval); sprayInterval = null; }
     painting = false;
@@ -971,10 +1010,10 @@ function initProStudio(canvas, previewCanvas) {
   if (undoBtn) undoBtn.onclick = () => { if (undoStack.length) { ctx.putImageData(undoStack.pop(), 0, 0); } };
 
   const clearBtn = document.getElementById('clearCanvas');
-  if (clearBtn) clearBtn.onclick = () => { saveUndo(); ctx.fillStyle = '#fff8fc'; ctx.fillRect(0, 0, canvas.width/2, canvas.height/2); };
+  if (clearBtn) clearBtn.onclick = () => { saveUndo(); ctx.fillStyle = '#fff8fc'; ctx.fillRect(0, 0, canvas._cssWidth, canvas._cssHeight); };
 
   const fillBgBtn = document.getElementById('fillBg');
-  if (fillBgBtn) fillBgBtn.onclick = () => { saveUndo(); ctx.fillStyle = hexToRgba(color, opacity); ctx.fillRect(0, 0, canvas.width/2, canvas.height/2); };
+  if (fillBgBtn) fillBgBtn.onclick = () => { saveUndo(); ctx.fillStyle = hexToRgba(color, opacity); ctx.fillRect(0, 0, canvas._cssWidth, canvas._cssHeight); };
 
   const saveBtn = document.getElementById('saveCanvas');
   if (saveBtn) saveBtn.onclick = () => {
@@ -1280,6 +1319,59 @@ function checkPuzzle() {
     res.innerHTML = '💭 <span style="color:var(--text-mid);">Masih kurang kata — coba tambahkan lagi!</span>';
   } else {
     res.innerHTML = '🌸 <span style="color:var(--text-mid);">Hampir! Coba urutkan lagi ya ~ 🔄</span>';
+  }
+}
+
+function shuffleCookieSteps() {
+  const container = document.getElementById('cookieSteps');
+  const result = document.getElementById('cookieStepResult');
+  if (!container || !result) return;
+
+  const steps = [
+    'Panaskan wajan dan sangrai kataifi sampai harum.',
+    'Lelehkan marshmallow dan mentega, lalu tambahkan cokelat serta susu bubuk.',
+    'Oleskan pasta pistachio ke dalam adonan sebagai isian creamy.',
+    'Bentuk adonan menjadi bola dan lapisi dengan kataifi renyah.',
+    'Dinginkan sebentar sebelum disajikan agar tekstur chewy tetap nikmat.'
+  ];
+
+  const shuffled = [...steps].sort(() => Math.random() - 0.5);
+  container.innerHTML = shuffled.map((step, idx) => `
+    <button class="cookie-step-btn" data-step="${step}" type="button">${idx + 1}. ${step}</button>
+  `).join('');
+  result.textContent = 'Susun urutan langkahnya lalu klik Cek Urutan.';
+
+  container.querySelectorAll('.cookie-step-btn').forEach(btn => {
+    btn.onclick = () => {
+      btn.classList.toggle('selected');
+    };
+  });
+}
+
+function checkCookieOrder() {
+  const container = document.getElementById('cookieSteps');
+  const result = document.getElementById('cookieStepResult');
+  if (!container || !result) return;
+
+  const selected = Array.from(container.querySelectorAll('.cookie-step-btn.selected')).map(btn => btn.textContent.replace(/^\d+\. /, ''));
+  const correctOrder = [
+    'Panaskan wajan dan sangrai kataifi sampai harum.',
+    'Lelehkan marshmallow dan mentega, lalu tambahkan cokelat serta susu bubuk.',
+    'Oleskan pasta pistachio ke dalam adonan sebagai isian creamy.',
+    'Bentuk adonan menjadi bola dan lapisi dengan kataifi renyah.',
+    'Dinginkan sebentar sebelum disajikan agar tekstur chewy tetap nikmat.'
+  ];
+
+  if (selected.length !== correctOrder.length) {
+    result.textContent = 'Pilih semua langkah terlebih dahulu, lalu klik Cek Urutan.';
+    return;
+  }
+
+  const isCorrect = selected.every((step, idx) => step === correctOrder[idx]);
+  if (isCorrect) {
+    result.innerHTML = '🎉 Tepat sekali! Kamu tahu cara membuat Dubai Chewy Cookie yang lezat. Hadiahmu sudah dekat!';
+  } else {
+    result.innerHTML = '🤔 Hmm, ada urutan yang kurang tepat. Coba lagi ya!';
   }
 }
 
